@@ -1,0 +1,84 @@
+---
+title: "DW-Exercise2"
+author: "Diane K"
+date: "September 7, 2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo = FALSE, message = FALSE}
+##Load libraries
+library(dplyr)
+library(knitr)
+```
+
+
+##0. Load data to data frame
+```{r message = FALSE}
+titanic_dataset <- read.csv(file="titanic_original.csv"
+                       , head = TRUE, sep=",")
+str(titanic_dataset)
+
+kable(head(titanic_dataset[,1:5]) , format = "markdown", caption = "Titanic dataset")
+kable(head(titanic_dataset[,6:14]) , format = "markdown")
+```
+
+
+##1. Replace missing values in embarked with S
+```{r message = FALSE}
+if( is.factor(titanic_dataset$embarked)){
+  levels(titanic_dataset$embarked)[1] <- "S"
+}else{
+  titanic_dataset$embarked[ is.na(titanic_dataset$embarked) |  
+                              titanic_dataset$embarked == ""] <- "S" 
+}
+```
+
+
+##2.a Replace missing age with mean age
+```{r message = FALSE}
+av_age <- mean( titanic_dataset$age, na.rm = TRUE)
+titanic_dataset$age[ is.na(titanic_dataset$age) ] <- av_age
+```
+
+##2.b
+- Could not replace with 0, because it's a wrong age for someone alive
+- Could not replace with a negative value because it might impact calculations on the age column
+
+
+
+##3. Replace missing values in LifeBoat column with "None"
+```{r message = FALSE}
+if( is.factor(titanic_dataset$boat)){
+  levels(titanic_dataset$boat)[1] <- "None"
+}else{
+  titanic_dataset$boat[is.na(titanic_dataset$boat) ] <- "None"
+}
+```
+
+
+##4. Add flag has_cabin_number
+We should not replace missing cabin numbers because not all passengers purchased cabins
+
+```{r message = FALSE}
+titanic_dataset <- titanic_dataset %>% mutate(has_cabin_number = ifelse( 
+  is.na(titanic_dataset$cabin) | (titanic_dataset$cabin) == "", 0, 1) ) 
+```
+
+
+##Output
+```{r message = FALSE}
+str(titanic_dataset)
+
+kable(head(titanic_dataset[,1:5]) , format = "markdown", caption = "Titanic dataset cleaned")
+kable(head(titanic_dataset[,6:12]) , format = "markdown") 
+kable(head(titanic_dataset[,13:15]) , format = "markdown") 
+
+write.csv(titanic_dataset, file = "titanic_clean.csv"
+          , row.names = FALSE, append = FALSE)
+```
+
+

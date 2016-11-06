@@ -1,0 +1,131 @@
+---
+title: "Run Analysis on Smartphones Dataset"
+author: "Diane K"
+date: "September 11, 2016"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##  Load libraries
+```{r  message = FALSE}
+library(dplyr)
+library(tidyr)
+library(knitr)
+library(pander)
+```
+
+
+## a. Merge training and test datasets into one dataset
+```{r message = FALSE}
+features <- read.table( 
+  file = "./UCI HAR Dataset/features.txt") 
+str(features)
+
+kable( head(features),format = "markdown", caption = "Features" )
+```
+
+### Merge x training and test sets
+```{r message = FALSE}
+xTrain <- read.table( 
+  file = "./UCI HAR Dataset/train/X_train.txt")
+xTest <- read.table( 
+  file = "./UCI HAR Dataset/test/X_test.txt")
+x <- rbind(xTrain, xTest)
+
+str(x)
+```
+
+### Name feature columns in x
+```{r message = FALSE}
+names(x) <- make.names(features$V2, unique = TRUE)
+str(x)
+pander(head(x), split.table = 80, style = 'rmarkdown')
+```
+
+### Read activities
+```{r message = FALSE}
+activityLabels <- read.table( 
+  file = "./UCI HAR Dataset/activity_labels.txt") 
+```
+
+### Label activities
+```{r message = FALSE}
+names(activityLabels) <- c('ActivityLabel', 'ActivityName')
+str(activityLabels)
+kable( head(activityLabels),format = "markdown", caption = "Activities labels" )
+```
+
+### Merge subject train and test sets
+```{r message = FALSE}
+subjectTrain <- read.table( 
+  file = "./UCI HAR Dataset/train/subject_train.txt") 
+subjectTest <- read.table( 
+  file = "./UCI HAR Dataset/test/subject_test.txt") 
+subject <- rbind(subjectTrain, subjectTest)
+
+names(subject) <- c('subject')
+str(subject)
+kable( head(subject),format = "markdown", caption = "Subjects" )
+```
+
+### Merge y training and test sets
+```{r message = FALSE}
+yTrain <- read.table( 
+  file = "./UCI HAR Dataset/train/y_train.txt")
+yTest <- read.table( 
+  file = "./UCI HAR Dataset/test/y_test.txt")
+y <- rbind(yTrain, yTest)
+
+names(y) <- c('ActivityLabel')
+str(y)
+kable( head(y),format = "markdown", caption = "y" )
+```
+
+```{r message = FALSE, echo=FALSE}
+# bodyAccXTrain <- read.table( 
+#   file = "./UCI HAR Dataset/train/Inertial Signals/body_acc_x_train.txt")
+# str(bodyAccXTrain)
+# head(bodyAccXTrain)
+```
+
+### Merge all the datasets into 1
+```{r message = FALSE}
+smartphoneDataset <- cbind(subject, y) %>% left_join(activityLabels) %>% cbind(x)
+
+str(smartphoneDataset)
+pander(head(smartphoneDataset), split.table = 80, style = 'rmarkdown')
+```
+
+
+
+## b. Extract/remove columns containing mean and standard deviation for each variable
+```{r message = FALSE}
+smartphoneDatasetReduced <- smartphoneDataset %>% select( -matches("mean|std"))
+
+str(smartphoneDatasetReduced)
+pander(head(smartphoneDatasetReduced), split.table = 80, style = 'rmarkdown')
+```
+
+
+## c. Create tidy dataset with the average of each variable for each activity and each subject
+```{r message = FALSE}
+smartphoneDatasetAverages <- smartphoneDatasetReduced %>% 
+  group_by(subject, ActivityName) %>%
+  summarise_each(funs(mean), 
+                 vars=-one_of(c('subject', 'ActivityLabel', 'ActivityName')) )
+
+str(smartphoneDatasetAverages)
+pander(head(smartphoneDatasetAverages), split.table = 80, style = 'rmarkdown')
+```
+
+
+## Output
+```{r message = FALSE}
+write.csv(smartphoneDataset, file = "smartphone_merged.csv"
+          , row.names = FALSE, append = FALSE)
+write.csv(smartphoneDatasetAverages, file = "smartphone_averages.csv"
+          , row.names = FALSE, append = FALSE)
+```
