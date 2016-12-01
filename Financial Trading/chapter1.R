@@ -1,7 +1,27 @@
 #### CHAPTER 1: TRADING BASICS #########################
-#setRepositories(addURLs =       c(Rforge = "http://R-Forge.R-project.org"))
-#install.packages("quantstrat", repos="http://R-Forge.R-project.org", type="source")
 
+#######################################################################
+#help(quantstrat)
+#Author(s):
+  
+#  Peter Carl, Brian G. Peterson, Joshua Ulrich, Garrett See, Yu Chen
+
+#Maintainer: Brian G. Peterson <brian@braverock.com>
+###############################################################################
+  
+  
+#setRepositories(addURLs =       c(Rforge = "http://R-Forge.R-project.org"))
+
+install.packages("FinancialInstrument")
+install.packages("PerformanceAnalytics")
+install.packages("foreach")
+install.packages("xts")
+#install.packages("quantstrat", repos="http://R-Forge.R-project.org")
+#install.packages("quantstrat", repos="http://R-Forge.R-project.org", type="source")
+install.packages("C:/Users/kamni/Documents/R/blotter_0.9.1741.zip", repos = NULL, type="source")
+install.packages("C:/Users/kamni/Documents/R/quantstrat_0.9.1739.zip", repos = NULL, type="source")
+
+library(quantstrat)
 library(TTR)
 
 ##### PLOTTING FINANCIAL DATA #############
