@@ -9,26 +9,23 @@ install.packages("C:/Users/kamni/Documents/R/quantstrat_0.9.1739.zip", repos = N
 
 library(zoo)
 library( xts)
-library( quantmod)
 library(TTR)
+library( quantmod)
 
 
 ### Load libraries
 library(dplyr)
 library(data.table)
 
+library(FinancialInstrument)
 library(PerformanceAnalytics)
 library(blotter)
 library(Quandl)
+library(foreach)
 library(quantstrat)
 
 
-### Load data to data frame
-
-help( Cl)
-help(plot)
-help(par)
-help( SMA)
+### Load data from Quandl
 
 #mydata = Quandl("WIKI/AEP", start_date="2000-01-01", end_date="2016-11-30", type="raw")
 #head(mydata)
@@ -37,7 +34,7 @@ help( SMA)
 
 #mydata <- as.xts( mydata)
 
-mydata <- Quandl("WIKI/AEP", start_date="2000-01-01", end_date="2016-11-30", type="xts")
+mydata <- Quandl("WIKI/AEP", start_date="2000-01-01", end_date="2017-01-31", type="xts")
 head(mydata)
 mydata <- mydata[, c( 1,2,3,4,5,6)]
 
@@ -58,16 +55,17 @@ plot( Cl(mydata ), type = 'l')
 ### Add a 200-day moving average using the lines command
 #lines( mydata$Date, SMA(  mydata$Close, n = 200), col = "red")
 lines( SMA(  Cl(mydata ), n = 200), col = "red")
-
+lines( SMA(  Cl(mydata ), n = 300), col = "purple")
+lines( SMA(  Cl(mydata ), n = 50), col = "cyan")
 
 ############## chap 2: Initialization  ############
 ### Create initdate, from, and to charater strings
 initdate <- "2000-01-01"
 from <- "2003-01-01"
-to <- "2015-12-31"
+to <- "2016-12-31"
 
 ### Set the timezone to UTC
-Sys.setenv(TZ = "UTC")
+Sys.setenv(TZ = "ET")
 
 ### Set the currency to USD 
 currency("USD")
