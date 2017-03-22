@@ -1,0 +1,15 @@
+```{r, echo=FALSE}
+```
+
+
+REFERENCES:
+- Financial trading course: https://www.datacamp.com/courses/financial-trading-in-r
+- Investopedia 4 most common indicators: http://www.investopedia.com/articles/active-trading/041814/four-most-commonlyused-indicators-trend-trading.asp
+- Oscillators: http://www.investopedia.com/terms/o/oscillator.asp 
+- Momentums: http://www.investopedia.com/terms/m/momentum.asp
+- sharpe ratio: http://www.investopedia.com/terms/s/sharperatio.asp?ad=dirN&qo=investopediaSiteSearch&qsrc=0&o=40186
+- understanding profit metrics: http://www.investopedia.com/articles/investing/062113/understanding-profit-metrics-gross-operating-and-net-profits.asp?ad=dirN&qo=investopediaSiteSearch&qsrc=0&o=40186
+
+
+
+

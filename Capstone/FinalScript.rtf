@@ -1,0 +1,458 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sa200\sl276\slmult1\lang9\f0\fs22 #### UPDATE R ####\par
+install.packages("installr")\par
+updateR()\par
+\par
+#### INSTALL PACKAGES ####\par
+install.packages("dplyr")\par
+install.packages("FinancialInstrument")\par
+install.packages("PerformanceAnalytics")\par
+install.packages("foreach")\par
+install.packages("xts")\par
+install.packages("Quandl")\par
+\par
+# Download here {\field{\*\fldinst{HYPERLINK "https://r-forge.r-project.org/R/?group_id=316"}}{\fldrslt{\ul\cf1 https://r-forge.r-project.org/R/?group_id=316}}}\f0\fs22\par
+install.packages("C:/Users/d_kamning/Documents/R/win-library/3.3/blotter_0.9.1741.zip",\par
+                                   repos = NULL, type = "source")\par
+install.packages("C:/Users/d_kamning/Documents/R/win-library/3.3/quantstrat_0.9.1739.zip",\par
+                                   repos = NULL, type = "source")\par
+\par
+#### Load libraries ####\par
+library(zoo)\par
+library(xts)\par
+library(TTR)\par
+library(quantmod)\par
+\par
+library(dplyr)\par
+#library(data.table)\par
+\par
+library(FinancialInstrument)\par
+library(PerformanceAnalytics)\par
+library(blotter)\par
+library(Quandl)\par
+library(foreach)\par
+library(quantstrat)\par
+\par
+#### LOAD DATA ####\par
+mydata <- Quandl("WIKI/AEP", start_date = "2000-01-01", end_date = "2017-01-31", type = "xts")\par
+head(mydata)\par
+mydata <- mydata[, c(1, 2, 3, 4, 5, 6)]\par
+\par
+#### VISUALIZE DATA ####\par
+plot(Cl(mydata), type = 'l')\par
+lines(SMA(Cl(mydata), n = 200), col = "red")\par
+lines(SMA(Cl(mydata), n = 300), col = "purple")\par
+lines(SMA(Cl(mydata), n = 50), col = "cyan")\par
+\par
+plot(RSI(Cl(mydata), n = 2), type = "l")\par
+\par
+#### INITIALIZE STRATEGY ####\par
+### Create initdate, from, and to charater strings\par
+initdate <- "2000-01-01"\par
+from <- "2003-01-01"\par
+to <- "2016-12-31"\par
+\par
+### Set the timezone to UTC\par
+#OlsonNames()\par
+Sys.setenv(TZ = "EST")\par
+\par
+### Set the currency to USD \par
+currency("USD")\par
+\par
+### Use the stock command to initialize and set currency to USD\par
+stock("mydata", currency = "USD")\par
+\par
+### Define your trade size and initial equity\par
+tradesize <- 100000\par
+initeq <- 100000\par
+\par
+### Define the names of your strategy, portfolio and account\par
+strategy.st <- "firststrat"\par
+portfolio.st <- "firststrat"\par
+account.st <- "firststrat"\par
+\par
+### Remove the existing strategy if it exists\par
+rm.strat(strategy.st)\par
+\par
+\par
+### initialize the portfolio\par
+initPortf(portfolio.st, symbols = "mydata", initDate = initdate, currency = "USD")\par
+\par
+### initialize the account\par
+initAcct(account.st, portfolios = portfolio.st, initDate = initdate, currency = "USD", initEq = initeq)\par
+\par
+### initialize the orders\par
+initOrders(portfolio.st, initDate = initdate)\par
+\par
+### store the strategy\par
+strategy(strategy.st, store = TRUE)\par
+\par
+\par
+\par
+#### ADD SMA INDICATORS (TREND) ####\par
+### 1. Add a 200-day simple moving average indicator to your strategy\par
+add.indicator(strategy = strategy.st,\par
+\par
+# Add the SMA function\par
+              name = "SMA",\par
+\par
+# Create a lookback period\par
+              arguments = list(x = quote(Cl(mktdata)), n = 200),\par
+\par
+# Label your indicator SMA200\par
+              label = "SMA200")\par
+\par
+\par
+### 2. Add a 50-day simple moving average indicator to your strategy\par
+add.indicator(strategy = strategy.st,\par
+\par
+# Add the SMA function\par
+              name = "SMA",\par
+\par
+# Create a lookback period\par
+              arguments = list(x = quote(Cl(mktdata)), n = 50),\par
+\par
+# Label your indicator SMA50\par
+              label = "SMA50")\par
+\par
+\par
+##### ADD CUSTOM RSI INDICATOR (REVERSION) ####\par
+### Write the RSI_avg function\par
+RSI_avg <- function(price, n1, n2) \{\par
+\par
+    # RSI 1 takes an input of the price and n1\par
+    rsi_1 <- RSI(price = price, n = n1)\par
+\par
+    # RSI 2 takes an input of the price and n2\par
+    rsi_2 <- RSI(price = price, n = n2)\par
+\par
+    # RSI_avg is the average of rsi_1 and rsi_2\par
+    RSI_avg <- (rsi_1 + rsi_2) / 2\par
+\par
+    # Your output of RSI_avg needs a column name of "RSI_avg"\par
+    colnames(RSI_avg) <- "RSI_avg"\par
+    return(RSI_avg)\par
+\}\par
+\par
+### Add the RSI_avg function to your strategy using an n1 of 3 and an n2 of 4, and label it "RSI_3_4"\par
+add.indicator(strategy.st, name = "RSI_avg", arguments = list(price = quote(Cl(mktdata)), n1 = 3, n2 = 4), label = "RSI_3_4")\par
+\par
+\par
+\par
+#### ADD OSCILLATOR DVO (David Varadi Oscillator, originated by David Varadi) ####\par
+#' Title\par
+#'\par
+#' @param HLC\par
+#' @param navg\par
+#' @param percentlookback\par
+#'\par
+#' @return\par
+#' @export\par
+#'\par
+#' @examples\par
+DVO <- function(HLC, navg = 2, percentlookback = 126) \{\par
+\par
+    # Compute the ratio between closing prices to the average of high and low\par
+    ratio <- Cl(HLC) / ((Hi(HLC) + Lo(HLC)) / 2)\par
+\par
+    # Smooth out the ratio outputs using a moving average\par
+    avgratio <- SMA(ratio, n = navg)\par
+\par
+    # Convert ratio into a 0-100 value using runPercentRank function\par
+    out <- runPercentRank(avgratio, n = percentlookback, exact.multiplier = 1) * 100\par
+    colnames(out) <- "DVO"\par
+    return(out)\par
+\}\par
+\par
+\par
+### Add the DVO indicator to your strategy\par
+add.indicator(strategy = strategy.st, name = "DVO",\par
+              arguments = list(HLC = quote(HLC(mktdata)), navg = 2, percentlookback = 126),\par
+              label = "DVO_2_126")\par
+\par
+### Use applyIndicators to test out your indicators\par
+#test <- applyIndicators(strategy = strategy.st, mktdata = OHLC(marketdata))\par
+test <- applyIndicators(strategy = strategy.st, mktdata = OHLC(mydata))     \par
+head(test)\par
+\par
+### Subset your data between Sep. 1 and Sep. 5 of 2013\par
+test_subset <- test["2013-09-01/2013-09-05"]\par
+test_subset\par
+\par
+\par
+\par
+\par
+#### ADD SIGNALS ####\par
+### 1. Using sigComparison ################\par
+# add a sigComparison which specifies that SMA50 must be greater than SMA200, call it longfilter\par
+add.signal(strategy.st, name = "sigComparison",\par
+\par
+# we are interested in the relationship between the SMA50 and the SMA200\par
+           arguments = list(columns = c("SMA50", "SMA200"),\par
+\par
+# particularly, we are interested when the SMA50 is greater than the SMA200\par
+                            relationship = "gt"),\par
+\par
+# label this signal longfilter\par
+           label = "longfilter")\par
+\par
+### 2. Using sigCrossover ###########\par
+# add a sigCrossover which specifies that the SMA50 is less than the SMA200 and label it filterexit\par
+add.signal(strategy.st, name = "sigCrossover",\par
+\par
+# we're interested in the relationship between the SMA50 and the SMA200\par
+           arguments = list(columns = c("SMA50", "SMA200"),\par
+\par
+# the relationship is that the SMA50 crosses under the SMA200\par
+                            relationship = "lt"),\par
+\par
+# label it filterexit\par
+           label = "filterexit")\par
+\par
+\par
+### 3.a Using sigThreshold - I ########\par
+#sigThreshold() function takes the cross argument, which specifies whether it will function similarly to sigComparison (cross = FALSE) or sigCrossover (cross = TRUE), respectively.\par
+\par
+# implement a sigThreshold which specifies that DVO_2_126 must be less than 20, label it longthreshold\par
+add.signal(strategy.st, name = "sigThreshold",\par
+\par
+# use the DVO_2_126 column\par
+           arguments = list(column = "DVO_2_126",\par
+\par
+# the threshold is 20\par
+                            threshold = 20,\par
+\par
+# we want the oscillator to be under this value\par
+                            relationship = "lt",\par
+\par
+# we're interested in every instance that the oscillator is less than 20\par
+                            cross = FALSE),\par
+\par
+# label it longthreshold\par
+           label = "longthreshold")\par
+\par
+\par
+### 3.b Using sigThreshold - II ###########\par
+# add a sigThreshold signal to your strategy that specifies that DVO_2_126 must cross above 80 and label it thresholdexit\par
+add.signal(strategy.st, name = "sigThreshold",\par
+\par
+# reference the column of DVO_2_126\par
+           arguments = list(column = "DVO_2_126",\par
+\par
+# set a threshold of 80\par
+                            threshold = 80,\par
+\par
+# the oscillator must be greater than 80\par
+                            relationship = "gt",\par
+\par
+# we are interested only in the cross\par
+                            cross = TRUE),\par
+\par
+# label it thresholdexit\par
+           label = "thresholdexit")\par
+\par
+\par
+# Create your dataset: test\par
+test_init <- applyIndicators(strategy.st, mktdata = OHLC(mydata))\par
+test <- applySignals(strategy = strategy.st, mktdata = test_init)\par
+head(test)\par
+### Subset your data between Sep. 1 and Sep. 5 of 2013\par
+test_subset <- test["2013-09-01/2013-09-05"]\par
+test_subset\par
+\par
+### 4. Using sigFormula ###########\par
+### 5. Combining signals ############\par
+# add a sigFormula signal to your code specifying that both longfilter and longthreshold must be TRUE, label it longentry\par
+add.signal(strategy.st, name = "sigFormula",\par
+\par
+# specify that longfilter and longthreshold must be TRUE\par
+           arguments = list(formula = "longfilter & longthreshold",\par
+\par
+# specify that cross must be TRUE\par
+                            cross = TRUE),\par
+\par
+# label it longentry\par
+           label = "longentry")\par
+\par
+# Test\par
+test_init <- applyIndicators(strategy.st, mktdata = OHLC(mydata))\par
+test <- applySignals(strategy = strategy.st, mktdata = test_init)\par
+head(test)\par
+test_subset <- test["2013-09-01/2013-09-05"]\par
+test_subset\par
+\par
+\par
+\par
+#### ADD RULES ####\par
+### Using add.rule() to implement an exit rule #########\par
+add.rule(strategy.st, name = "ruleSignal",\par
+         arguments = list(sigcol = "filterexit", sigval = TRUE, orderqty = "all",\par
+                          ordertype = "market", orderside = "long",\par
+                          replace = FALSE, prefer = "Open"),\par
+         type = "exit")\par
+\par
+#In quantstrat, the replace argument specifies whether or not to ignore all other signals on the same date when the strategy acts upon one signal.\par
+### In this case, you will be working with a rule that sells when the DVO has crossed a certain threshold. In particular, you will be working with the thresholdexit rule now.\par
+add.rule(strategy.st, name = "ruleSignal",\par
+         arguments = list(sigcol = "thresholdexit", sigval = TRUE, orderqty = "all",\par
+                          ordertype = "market", orderside = "long",\par
+                          replace = FALSE, prefer = "Open"),\par
+         type = "exit")\par
+\par
+\par
+### Using add.rule() to implement an entry rule #########\par
+# create an entry rule of 1 share when all conditions line up to enter into a position\par
+add.rule(strategy.st, name = "ruleSignal",\par
+\par
+# use the longentry column as the sigcol\par
+         arguments = list(sigcol = "longentry",\par
+\par
+# set sigval to TRUE\par
+                        sigval = TRUE,\par
+\par
+# set orderqty to 1, all can only be used for exit rules\par
+                        orderqty = 1,\par
+\par
+# use a market type of order\par
+                        ordertype = "market",\par
+\par
+# take the long orderside\par
+                        orderside = "long",\par
+\par
+# do not replace other signals\par
+                        replace = FALSE,\par
+\par
+# buy at the next day's opening price\par
+                        prefer = "Open"),\par
+\par
+# this is an enter type rule, not an exit\par
+         type = "enter")\par
+\par
+### Implementing a rule with an order sizing function ########\par
+### The constructs that allow quantstrat to vary the amount of shares bought or sold are called order sizing functions.\par
+### add a rule that uses an osFUN to size an entry position\par
+add.rule(strategy = strategy.st, name = "ruleSignal",\par
+         arguments = list(sigcol = "longentry", sigval = TRUE, ordertype = "market",\par
+                          orderside = "long", replace = FALSE, prefer = "Open",\par
+\par
+# use the osFUN called osMaxDollar\par
+                          osFUN = osMaxDollar,\par
+\par
+# the tradeSize argument should be equal to tradesize (defined earlier)\par
+                          tradeSize = tradesize,\par
+\par
+# the maxSize argument should be equal to tradesize as well\par
+                          maxSize = tradesize),\par
+         type = "enter")\par
+\par
+\par
+# Test\par
+test_init <- applyIndicators(strategy.st, mktdata = OHLC(mydata))\par
+test <- applySignals(strategy = strategy.st, mktdata = test_init)\par
+head(test)\par
+test_subset <- test["2013-09-01/2013-09-05"]\par
+test_subset\par
+\par
+\par
+\par
+\par
+\par
+#### RUNNING YOUR STRATEGY ####\par
+### Use applyStrategy() to apply your strategy. Save this to out\par
+out <- applyStrategy(strategy = strategy.st, portfolios = portfolio.st)\par
+\par
+### Update your portfolio (portfolio.st)\par
+updatePortf(portfolio.st)\par
+daterange <- time(getPortfolio(portfolio.st)$summary)[-1]\par
+\par
+### Update your account (account.st)\par
+updateAcct(account.st, daterange)\par
+updateEndEq(account.st)\par
+\par
+### what is the date of the last trade?\par
+"2015-12-23"\par
+\par
+\par
+### Profit factor ########\par
+#The profit factor is how many dollars you make for each dollar you lose. A profit factor above 1 means your strategy is profitable.\par
+# Get the tradeStats for your portfolio\par
+tstats <- tradeStats(Portfolios = portfolio.st)\par
+\par
+# Print the profit factor\par
+tstats$Profit.Factor\par
+\par
+\par
+\par
+\par
+#### USING CHART.POSN() ####\par
+### use chart.Posn to view your system's performance on mydata\par
+#  This generates a crisp and informative visualization of the performance of your trading system over the course of the simulation.\par
+# Chart trades against market data, position through time, and cumulative P\\&L\par
+# Produces a three-panel chart of time series charts that contains prices and transactions in the top panel, the resulting position in the second, and a cumulative profit-loss line chart in the third. \par
+# The percent positive statistic lets you know how many of your trades were winners. \par
+chart.Posn(Portfolio = portfolio.st, Symbol = "mydata")\par
+\par
+### Adding indicators to a chart.Posn() chart ##########\par
+# compute the SMA50\par
+sma50 <- SMA(x = Cl(mydata), n = 50)\par
+\par
+# compute the SMA200\par
+sma200 <- SMA(x = Cl(mydata), n = 200)\par
+\par
+# compute the DVO_2_126 with an navg of 2 and a percentlookback of 126\par
+dvo <- DVO(HLC = HLC(mydata), navg = 2, percentlookback = 126)\par
+\par
+# recreate the chart.Posn of the strategy from the previous exercise\par
+chart.Posn(Portfolio = portfolio.st, Symbol = "mydata")\par
+\par
+# overlay the SMA50 on your plot as a blue line\par
+add_TA(sma50, on = 1, col = "blue")\par
+\par
+# overlay the SMA200 on your plot as a red line\par
+add_TA(sma200, on = 1, col = "red")\par
+\par
+# add the DVO_2_126 to the plot in a new window\par
+add_TA(dvo)\par
+\par
+\par
+\par
+#### COMPUTE SHARPE RATIO ####\par
+### A Sharpe ratio is a metric that compares the average reward to the average risk taken. Generally, a Sharpe ratio above 1 is a marker of a strong strategy. \par
+# Get instrument returns\par
+instrets <- PortfReturns(portfolio.st)\par
+\par
+# Compute Sharpe ratio from returns\par
+SharpeRatio.annualized(instrets, geometric = FALSE)\par
+\par
+\par
+########################################################################################\par
+########################### {\field{\*\fldinst{HYPERLINK "https://www.slideshare.net/QuantInsti/how-to-design-quant-trading-strategies-using-r"}}{\fldrslt{\ul\cf1 https://www.slideshare.net/QuantInsti/how-to-design-quant-trading-strategies-using-r}}}\f0\fs22   ###########\par
+#### HYPOTHESIS CHECK ####\par
+chart_Series(mydata) #NSEI\par
+zoom_Chart("2014-11-19" )\par
+addBBands( n = 20, sd = 2)\par
+\par
+#### ANALYZE OUTPUT ####\par
+# Order Book\par
+getOrderBook(portfolio.st)\par
+# Update Portfolio\par
+updatePortf(portfolio.st, Symbol = "mydata")\par
+chart.Posn(Portfolio = portfolio.st, Symbol = "mydata")\par
+# Strategy output with trdeStats\par
+tradeStats(portfolio.st, Symbol = "mydata")\par
+View(t(tradeStats(portfolio.st)))\par
+\par
+\par
+#### OPTIMIZATION ####\par
+.Th2 = c(.3, .4)\par
+.Th1 = c(.5, .6)\par
+\par
+results <- apply.paramset(strategy.st, paramset.label = 'THTFunc', portfolio.st = portfolio.st, account.st = account.st, nsamples = 4, verbose = TRUE)\par
+\par
+\par
+\par
+\par
+\par
+}
+ 

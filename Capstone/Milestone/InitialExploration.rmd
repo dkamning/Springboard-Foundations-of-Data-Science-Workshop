@@ -1,0 +1,132 @@
+---
+title: 'PROJECT MILESTONE REPORT'
+subtitle: 'FINANCIAL TRADING STRATEGY'
+author: 'Diane Kamning'
+date: March 21, 2017
+output:
+  pdf_document:
+    toc: true
+    number_sections: true
+mainfont: Times New Roman
+fontsize: 12pt
+header-includes:
+  - \setlength\parindent{24pt}
+---
+
+\pagebreak
+
+
+```{r, echo=FALSE}
+#### Load libraries ####
+library(rmarkdown)
+library(zoo)
+library(xts)
+library(TTR)
+
+library(dplyr)
+
+library(FinancialInstrument)
+library(PerformanceAnalytics)
+library(blotter)
+library(Quandl)
+
+#### LOAD DATA ####
+### stockOne is AEP while stockTwo is CHK (Chesapeake Energy Corp.) ###
+stockOne <- Quandl("WIKI/AEP", start_date = "2000-01-01", end_date = "2017-01-31", type = "xts")
+#head(stockOne)
+stockOne <- stockOne[, c(1, 2, 3, 4, 5, 6)]
+
+stockTwo <- Quandl("WIKI/CHK", start_date = "2000-01-01", end_date = "2017-01-31", type = "xts")
+#head(stockTwo)
+stockTwo <- stockTwo[, c(1, 2, 3, 4, 5, 6)]
+```
+
+# INTRODUCTION  
+  
+  This project aims at building a model that will ideally always output successful bids in the stock market. For that, it builds a model which gives better results when constantly trained in a sliding-time window.
+The goal is to design a simple financial trading strategy that will be profitable and that will provide a good risk-adjusted measure of return.  
+
+
+# DATA SETS  
+  
+  Two datasets will be used here to test the strategy:
+
+- The American Electric Company (AEP) dataset from Quandl
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(stockOne) )
+```  
+  
+- The Chesapeake Energy Corporation (CHK) from Quandl.
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(stockTwo))
+```
+  
+  An initial exploration of the AEP dataset reveals 5 important fields:  
+
+- The date
+- The Open price
+- The High price
+- The Low price
+- The Close price.  
+  
+  Some of the issues encountered with the data:  
+
+- The presence of the adjusted closing price was confusing for some methods in the packages Quandstrat and xts, as those methods kept throwing errors. I had to remove the adjusted closing price from my data sets and just keep the closing price
+- Some functions and arguments were not found because the Quandstrat package is not yet stable.
+
+
+# PRELIMINARY EXPLORATION  
+  
+  Indicators are transformations of market data that give an insight into the overall market behavior by measuring current conditions and/or forecasting trends.  Among others, there are trend-following indicators which depict the general price direction, and oscillators used to discover on a scale of 0 to 100 short-term overbought (above 70 to 80) or oversold (below 30 to 20) conditions .
+  Combining trend-following indicators and oscillator/reversion indicators gives more insight into the data for this project. The preliminary oscillator used is an RSI (Relative Strength Index) with a 3-days lookback period. The preliminary trend indicators are 3 SMA (Simple Moving Average). After applying those indicators to the stocks, there are some periods of time during which none of the indicators seem to be right. Also, the SMA50 (Simple Moving Average) seems to better mimic the trend of the closing prices for both data sets
+
+- SMA AEP
+
+```{r, echo=FALSE}
+#### VISUALIZE DATA ####
+### Stock 1 SMA
+plot(Cl(stockOne), type = 'l', xlab = 'Date', ylab = 'Closing price', main = 'AEP closing price trend with SMA')
+lines(SMA(Cl(stockOne), n = 200), col = "red")
+lines(SMA(Cl(stockOne), n = 300), col = "purple")
+lines(SMA(Cl(stockOne), n = 50), col = "cyan")
+legend('topleft', c("SMA200", "SMA300", "SMA50", "Closing price"),
+    lty = c(1, 1), lwd = c(2.5, 2.5), col = c('red', 'purple', 'cyan', "black"), cex = .50)
+```
+  
+- SMA CHK
+
+```{r, echo=FALSE}
+#### VISUALIZE DATA ####
+### Stock 2 SMA
+plot(Cl(stockTwo), type = 'l', xlab = 'Date', ylab = 'Closing price', main = 'CHK closing price trend with SMA')
+lines(SMA(Cl(stockTwo), n = 200), col = "red")
+lines(SMA(Cl(stockTwo), n = 300), col = "purple")
+lines(SMA(Cl(stockTwo), n = 50), col = "cyan")
+legend('topleft', c("SMA200", "SMA300", "SMA50", "Closing price"),
+    lty = c(1, 1), lwd = c(2.5, 2.5), col = c('red', 'purple', 'cyan', "black"), cex = .50)
+```
+  
+  An observation of the graphs of the stocks’ RSI reveals that there are effectively periods of reversion (2013-09-03 to 2013-9-05 for example) that won’t be captured by a trend-following indicator:
+
+- RSI AEP
+
+```{r, echo=FALSE}
+#### VISUALIZE DATA ####
+### Stock 1 RSI
+plot(RSI(Cl(stockOne), n = 3), type = "l", xlab = 'Date', ylab = 'Closing price', main = 'AEP closing price RSI with 3-days lookback')
+```
+
+- RSI CHK
+
+```{r, echo=FALSE}
+#### VISUALIZE DATA ####
+### Stock 2 RSI
+plot(RSI(Cl(stockTwo), n = 3), type = "l", xlab = 'Date', ylab = 'Closing price', main = 'CHK closing price RSI with 3-days lookback')
+```
+
+
+# APPROACH
+  
+  The main objective is to obtain a profit factor above 1 after running the strategy on each of the data sets. 
+The approach here would be to combine both SMA50 and SMA200 with an oscillator to avoid false signals. The trend-following indicators would help catch up trends.
+
