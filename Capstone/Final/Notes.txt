@@ -4,11 +4,31 @@
 
 REFERENCES:
 - Financial trading course: https://www.datacamp.com/courses/financial-trading-in-r
+- Quantitative Trading Strategy Using R: A Step by Step Guide: https://www.r-bloggers.com/quantitative-trading-strategy-using-r-a-step-by-step-guide/
+<<
+The key features of quantstrat are,
+•Supports strategies which include indicators, signals, and rules
+•Allows strategies to be applied to multi-asset portfolios
+•Supports market, limit, stoplimit, and stoptrailing order types
+•Supports order sizing and parameter optimization
+
+In this post we build a strategy that includes indicators, signals, and rules.
+
+For a generic signal based model following are the objects one should consider,
+•Instruments- Contain market data
+•Indicators- Quantitative values derived from market data
+•Signals- Result of interaction between market data and indicators
+•Rules- Generate orders using market data, indicators and signals.
+
+>>
+
 - Investopedia 4 most common indicators: http://www.investopedia.com/articles/active-trading/041814/four-most-commonlyused-indicators-trend-trading.asp
 - Oscillators: http://www.investopedia.com/terms/o/oscillator.asp 
 - Momentums: http://www.investopedia.com/terms/m/momentum.asp
 - sharpe ratio: http://www.investopedia.com/terms/s/sharperatio.asp?ad=dirN&qo=investopediaSiteSearch&qsrc=0&o=40186
 - understanding profit metrics: http://www.investopedia.com/articles/investing/062113/understanding-profit-metrics-gross-operating-and-net-profits.asp?ad=dirN&qo=investopediaSiteSearch&qsrc=0&o=40186
+- Trend Vigor Part III: ATR position sizing, Annualized Sharpe above 1.4, and Why Leverage Is Pointless: https://www.r-bloggers.com/trend-vigor-part-iii-atr-position-sizing-annualized-sharpe-above-1-4-and-why-leverage-is-pointless/
+
 
 
 

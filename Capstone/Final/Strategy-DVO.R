@@ -336,7 +336,7 @@ sma200 <- SMA(x = Cl(stockOne), n = 200)
 # compute the DVO_2_126 with an navg of 2 and a percentlookback of 126
 dvo <- DVO(HLC = HLC(stockOne), navg = 2, percentlookback = 126)
 # recreate the chart.Posn of the strategy 
-chart.Posn(Portfolio = portfolio.st, Symbol = "stockTwo")
+chart.Posn(Portfolio = portfolio.st, Symbol = "stockOne")
 # overlay the SMA50 on your plot as a blue line
 add_TA(sma50, on = 1, col = "blue")
 # overlay the SMA200 on your plot as a red line
@@ -354,7 +354,7 @@ sma200 <- SMA(x = Cl(stockOne), n = 200)
 # compute the DVO_2_126 with an navg of 2 and a percentlookback of 126
 dvo <- DVO(HLC = HLC(stockOne), navg = 2, percentlookback = 126)
 # recreate the chart.Posn of the strategy 
-chart.Posn(Portfolio = portfolio.st, Symbol = "stockOne")
+chart.Posn(Portfolio = portfolio.st, Symbol = "stockTwo")
 # overlay the SMA50 on your plot as a blue line
 add_TA(sma50, on = 1, col = "blue")
 # overlay the SMA200 on your plot as a red line
@@ -372,5 +372,13 @@ updatePortf(portfolio.st, Symbol = c("stockOne", "stockTwo"))
 # Strategy output with trdeStats
 tradeStats(portfolio.st, Symbol = c("stockOne", "stockTwo"))
 View(t(tradeStats(portfolio.st)))
+
+#### COMPUTE SHARPE RATIO ####
+### A Sharpe ratio is a metric that compares the average reward to the average risk taken. Generally, a Sharpe ratio above 1 is a marker of a strong strategy. 
+# Get instrument returns
+instrets <- PortfReturns(portfolio.st)
+
+# Compute Sharpe ratio from returns
+SharpeRatio.annualized(instrets, geometric = FALSE)
 
 

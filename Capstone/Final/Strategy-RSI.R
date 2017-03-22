@@ -372,3 +372,11 @@ updatePortf(portfolio.st, Symbol = c("stockOne", "stockTwo"))
 # Strategy output with trdeStats
 tradeStats(portfolio.st, Symbol = c("stockOne", "stockTwo"))
 View(t(tradeStats(portfolio.st)))
+
+#### COMPUTE SHARPE RATIO ####
+### A Sharpe ratio is a metric that compares the average reward to the average risk taken. Generally, a Sharpe ratio above 1 is a marker of a strong strategy. 
+# Get instrument returns
+instrets <- PortfReturns(portfolio.st)
+
+# Compute Sharpe ratio from returns
+SharpeRatio.annualized(instrets, geometric = FALSE)
