@@ -1,0 +1,10 @@
+﻿div, code
+{
+    height: 480px;  
+    overflow: scroll 
+}
+
+
+table{
+    overflow: scroll
+}

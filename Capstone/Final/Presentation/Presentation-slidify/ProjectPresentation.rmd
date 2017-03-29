@@ -36,7 +36,7 @@ library(foreach)
 library(quantstrat)
 
 ## Packages for nice table display
-pkg <- c("dplyr", "knitr", "devtools", "DT", "xtable")
+pkg <- c("dplyr", "knitr", "devtools", "DT", "xtable", "pander")
 # Check if packages are not installed and assign the
 # names of the packages not installed to the variable new.pkg
 new.pkg <- pkg[!(pkg %in% installed.packages())]
@@ -50,12 +50,14 @@ library(dplyr)
 library(knitr)
 library(DT)
 library(xtable)
+library(pander)
 
 
 #### Load scripts ####
 #getwd()
 #setwd('C:/Users/d_kamning/OneDrive for Business/Private/Springboard/Capstone')
-source('F:/Springboard-Foundations-of-Data-Science-Workshop/Capstone/Final/functions_util.R')
+#source('F:/Springboard-Foundations-of-Data-Science-Workshop/Capstone/Final/functions_util.R')
+source('C:/Users/d_kamning/OneDrive for Business/Private/Springboard/Capstone/Final/functions_util.R')
 
 
 #### LOAD DATA ####
@@ -406,14 +408,14 @@ test_subset2 <- test2["2013-09-01/2013-09-05"]
 --- Slide Separator 
 
 ```{r, echo=FALSE, message = FALSE}
-print(knitr::kable(t(test_subset), caption = "AEP Subset"))
+pander::pandoc.table( t( test_subset), style = "grid", plain.ascii = TRUE , caption = "AEP Subset")
 ```
 
-  
 --- Slide Separator 
 
+
 ```{r, echo=FALSE, message = FALSE}
-print(knitr::kable(t(test_subset2), caption = "CHK Subset"))
+pander::pandoc.table( t( test_subset2), style = "grid", plain.ascii = TRUE, caption = "CHK Subset")
 ```
 
 
@@ -505,6 +507,8 @@ knitr::kable(tstats[, c("Symbol", "Profit.Factor")])
   Let's take a look at the system performance for the 2 stocks:
 
 - Stock 1: AEP  
+
+```{r, echo=FALSE, message=FALSE, fig.keep = 'last'}
 
 #### USING CHART.POSN() ####
 ### use chart.Posn to view your system's performance on the stocks
@@ -769,21 +773,29 @@ add.signal(strategyDVO.st, name = "sigFormula",
 ```
 
 
+---- Slide Separator
+
+
+
 ```{r, echo=FALSE, message = FALSE}
 
 # Test
 # Create your dataset: test
 test_init <- applyIndicators(strategyDVO.st, mktdata = OHLC(stockAEP))
 test <- applySignals(strategy = strategyDVO.st, mktdata = test_init)
-print(knitr::kable(t(test["2013-09-01/2013-09-05"]), caption = "AEP Subset"))
+pander::pandoc.table(t(test["2013-09-01/2013-09-05"]), style = "grid", plain.ascii = TRUE, caption = "AEP Subset")
 ```
   
 
 
+---- Slide Separator
+
+
 ```{r, echo=FALSE, message = FALSE}
+
 test_init2 <- applyIndicators(strategyDVO.st, mktdata = OHLC(stockCHK))
 test2 <- applySignals(strategy = strategyDVO.st, mktdata = test_init2)
-print( knitr::kable( t( test2["2013-09-01/2013-09-05"] ), caption =  "CHK Subset" ) )
+pander::pandoc.table(t(test2["2013-09-01/2013-09-05"]), style = "grid", plain.ascii = TRUE, caption = "CHK Subset")
 
 ### Subset your data between Sep. 1 and Sep. 5 of 2013
 #test_subset <- test["2013-09-01/2013-09-05"]
@@ -793,6 +805,11 @@ print( knitr::kable( t( test2["2013-09-01/2013-09-05"] ), caption =  "CHK Subset
 #test_subset2
 
 
+```
+  
+
+
+```{r, echo=FALSE, include = FALSE}
 
 
 #### ADD RULES ####
@@ -838,7 +855,7 @@ add.rule(strategyDVO.st, name = "ruleSignal",
 
 
 
---- Slide Separator 
+---- Slide Separator 
 
 ### STRATEGY 2: DVO
 
@@ -872,7 +889,15 @@ tstats <- tradeStats(Portfolios = portfolioDVO.st)
 tstats[, c("Symbol", "Profit.Factor")]
 ```
 
+
+
+
   Performance of the systems:  
+
+
+---- Slide Separator 
+
+### STRATEGY 2: DVO
   
 - stock 1: AEP
 
@@ -904,11 +929,9 @@ legend('top', c("SMA50", "SMA200", "DVO 2_126"),
 ```
   
 
-
---- Slide Separator 
+---- Slide Separator 
 
 ### STRATEGY 2: DVO
-
   
 - stock 2: CHK
 

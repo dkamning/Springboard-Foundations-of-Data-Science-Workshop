@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
   <title>PROJECT PRESENTATION</title>
@@ -13,7 +13,8 @@
     media="only screen and (max-device-width: 480px)" >
   <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
   <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
-  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/custom.css" />
+
   
   <!-- Grab CDN jQuery, fall back to local if offline -->
   <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
@@ -361,50 +362,37 @@ The approach here would be to combine both SMA50 and SMA200 with an oscillator t
 
 <slide class="" id="slide-15" style="background:;">
   <article data-timings="">
-    <pre><code>##  [1] &quot;|                | 2013-09-03| 2013-09-04| 2013-09-05|&quot;
-##  [2] &quot;|:---------------|----------:|----------:|----------:|&quot;
-##  [3] &quot;|Open            |   43.03000|   42.16000|   42.19000|&quot;
-##  [4] &quot;|High            |   43.13000|   42.34000|   42.45000|&quot;
-##  [5] &quot;|Low             |   42.07000|   41.83000|   42.07000|&quot;
-##  [6] &quot;|Close           |   42.16000|   42.21000|   42.14000|&quot;
-##  [7] &quot;|SMA.SMA200      |   45.75490|   45.76115|   45.76425|&quot;
-##  [8] &quot;|SMA.SMA50       |   44.93140|   44.90420|   44.86880|&quot;
-##  [9] &quot;|RSI_avg.RSI_3_4 |   22.85453|   26.99133|   24.42352|&quot;
-## [10] &quot;|longfilter      |    0.00000|    0.00000|    0.00000|&quot;
-## [11] &quot;|filterexit      |         NA|         NA|         NA|&quot;
-## [12] &quot;|longthreshold   |    0.00000|    0.00000|    0.00000|&quot;
-## [13] &quot;|thresholdexit   |    0.00000|    0.00000|    0.00000|&quot;
-## [14] &quot;|longentry       |    0.00000|    0.00000|    0.00000|&quot;
-## attr(,&quot;format&quot;)
-## [1] &quot;markdown&quot;
-## attr(,&quot;class&quot;)
-## [1] &quot;knit_asis&quot;
-## attr(,&quot;knit_cacheable&quot;)
-## [1] NA
-</code></pre>
-
-<p>--- Slide Separator </p>
-
-<pre><code>##  [1] &quot;|                | 2013-09-03| 2013-09-04| 2013-09-05|&quot;
-##  [2] &quot;|:---------------|----------:|----------:|----------:|&quot;
-##  [3] &quot;|Open            |   26.07000|   26.09000|   26.18000|&quot;
-##  [4] &quot;|High            |   26.41000|   26.18000|   26.24000|&quot;
-##  [5] &quot;|Low             |   26.02000|   26.00000|   26.02000|&quot;
-##  [6] &quot;|Close           |   26.16000|   26.12000|   26.17000|&quot;
-##  [7] &quot;|SMA.SMA200      |   20.35310|   20.40175|   20.44950|&quot;
-##  [8] &quot;|SMA.SMA50       |   23.32000|   23.45040|   23.57800|&quot;
-##  [9] &quot;|RSI_avg.RSI_3_4 |   61.91683|   58.61329|   62.21049|&quot;
-## [10] &quot;|longfilter      |    1.00000|    1.00000|    1.00000|&quot;
-## [11] &quot;|filterexit      |         NA|         NA|         NA|&quot;
-## [12] &quot;|longthreshold   |    0.00000|    0.00000|    0.00000|&quot;
-## [13] &quot;|thresholdexit   |    0.00000|    0.00000|    0.00000|&quot;
-## [14] &quot;|longentry       |    0.00000|    0.00000|    0.00000|&quot;
-## attr(,&quot;format&quot;)
-## [1] &quot;markdown&quot;
-## attr(,&quot;class&quot;)
-## [1] &quot;knit_asis&quot;
-## attr(,&quot;knit_cacheable&quot;)
-## [1] NA
+    <pre><code>## 
+## 
+## +-----------------------+--------------+--------------+--------------+
+## |                       |  2013-09-03  |  2013-09-04  |  2013-09-05  |
+## +=======================+==============+==============+==============+
+## |         Open          |    43.03     |    42.16     |    42.19     |
+## +-----------------------+--------------+--------------+--------------+
+## |         High          |    43.13     |    42.34     |    42.45     |
+## +-----------------------+--------------+--------------+--------------+
+## |          Low          |    42.07     |    41.83     |    42.07     |
+## +-----------------------+--------------+--------------+--------------+
+## |         Close         |    42.16     |    42.21     |    42.14     |
+## +-----------------------+--------------+--------------+--------------+
+## |      SMA.SMA200       |    45.75     |    45.76     |    45.76     |
+## +-----------------------+--------------+--------------+--------------+
+## |       SMA.SMA50       |    44.93     |     44.9     |    44.87     |
+## +-----------------------+--------------+--------------+--------------+
+## |    RSI_avg.RSI_3_4    |    22.85     |    26.99     |    24.42     |
+## +-----------------------+--------------+--------------+--------------+
+## |      longfilter       |      0       |      0       |      0       |
+## +-----------------------+--------------+--------------+--------------+
+## |      filterexit       |      NA      |      NA      |      NA      |
+## +-----------------------+--------------+--------------+--------------+
+## |     longthreshold     |      0       |      0       |      0       |
+## +-----------------------+--------------+--------------+--------------+
+## |     thresholdexit     |      0       |      0       |      0       |
+## +-----------------------+--------------+--------------+--------------+
+## |       longentry       |      0       |      0       |      0       |
+## +-----------------------+--------------+--------------+--------------+
+## 
+## Table: AEP Subset
 </code></pre>
 
   </article>
@@ -412,6 +400,45 @@ The approach here would be to combine both SMA50 and SMA200 with an oscillator t
 </slide>
 
 <slide class="" id="slide-16" style="background:;">
+  <article data-timings="">
+    <pre><code>## 
+## 
+## +-----------------------+--------------+--------------+--------------+
+## |                       |  2013-09-03  |  2013-09-04  |  2013-09-05  |
+## +=======================+==============+==============+==============+
+## |         Open          |    26.07     |    26.09     |    26.18     |
+## +-----------------------+--------------+--------------+--------------+
+## |         High          |    26.41     |    26.18     |    26.24     |
+## +-----------------------+--------------+--------------+--------------+
+## |          Low          |    26.02     |      26      |    26.02     |
+## +-----------------------+--------------+--------------+--------------+
+## |         Close         |    26.16     |    26.12     |    26.17     |
+## +-----------------------+--------------+--------------+--------------+
+## |      SMA.SMA200       |    20.35     |     20.4     |    20.45     |
+## +-----------------------+--------------+--------------+--------------+
+## |       SMA.SMA50       |    23.32     |    23.45     |    23.58     |
+## +-----------------------+--------------+--------------+--------------+
+## |    RSI_avg.RSI_3_4    |    61.92     |    58.61     |    62.21     |
+## +-----------------------+--------------+--------------+--------------+
+## |      longfilter       |      1       |      1       |      1       |
+## +-----------------------+--------------+--------------+--------------+
+## |      filterexit       |      NA      |      NA      |      NA      |
+## +-----------------------+--------------+--------------+--------------+
+## |     longthreshold     |      0       |      0       |      0       |
+## +-----------------------+--------------+--------------+--------------+
+## |     thresholdexit     |      0       |      0       |      0       |
+## +-----------------------+--------------+--------------+--------------+
+## |       longentry       |      0       |      0       |      0       |
+## +-----------------------+--------------+--------------+--------------+
+## 
+## Table: CHK Subset
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
   <hgroup>
     <h3>STRATEGY 1: RSI</h3>
   </hgroup>
@@ -427,7 +454,7 @@ The approach here would be to combine both SMA50 and SMA200 with an oscillator t
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-17" style="background:;">
+<slide class="" id="slide-18" style="background:;">
   <hgroup>
     <h3>STRATEGY 1: RSI</h3>
   </hgroup>
@@ -457,7 +484,7 @@ The approach here would be to combine both SMA50 and SMA200 with an oscillator t
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-18" style="background:;">
+<slide class="" id="slide-19" style="background:;">
   <hgroup>
     <h3>STRATEGY 1: RSI</h3>
   </hgroup>
@@ -466,65 +493,6 @@ The approach here would be to combine both SMA50 and SMA200 with an oscillator t
 
 <ul>
 <li>Stock 1: AEP<br></li>
-</ul>
-
-<h4>USING CHART.POSN()</h4>
-
-<h3>use chart.Posn to view your system&#39;s performance on the stocks</h3>
-
-<h1>This generates a crisp and informative visualization of the performance of your trading system over the course of the simulation.</h1>
-
-<h1>Chart trades against market data, position through time, and cumulative P&amp;L</h1>
-
-<h1>Produces a three-panel chart of time series charts that contains prices and transactions in the top panel, the resulting position in the second, and a cumulative profit-loss line chart in the third.</h1>
-
-<h1>The percent positive statistic lets you know how many of your trades were winners.</h1>
-
-<h3>Adding indicators to a chart.Posn() chart</h3>
-
-<h1>compute the SMA50</h1>
-
-<p>sma50 &lt;- SMA(x = Cl(stockAEP), n = 50)</p>
-
-<h1>compute the SMA200</h1>
-
-<p>sma200 &lt;- SMA(x = Cl(stockAEP), n = 200)</p>
-
-<h1>compute RSI_3_4</h1>
-
-<p>RSI3_4 &lt;- RSI_avg(price = Cl(stockAEP), n1 = 3, n2 = 4)</p>
-
-<h1>recreate the chart.Posn of the strategy</h1>
-
-<p>chart.Posn(Portfolio = portfolioRSI.st, Symbol = &quot;stockAEP&quot;, main = &quot;AEP Perfomance&quot;)</p>
-
-<h1>overlay the SMA50 on your plot as a blue line</h1>
-
-<p>add_TA(sma50, on = 1, col = &quot;cyan&quot;)</p>
-
-<h1>overlay the SMA200 on your plot as a red line</h1>
-
-<p>add_TA(sma200, on = 1, col = &quot;purple&quot;)</p>
-
-<h1>add the DVO_2_126 to the plot in a new window</h1>
-
-<p>add_TA(RSI3_4)
-legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quot;),
-    lty = c(1, 1), lwd = c(2.5, 2.5), col = c(&#39;cyan&#39;, &#39;purple&#39;, &quot;black&quot;), cex = .50, horiz = TRUE)</p>
-
-<pre><code></code></pre>
-
-  </article>
-  <!-- Presenter Notes -->
-</slide>
-
-<slide class="" id="slide-19" style="background:;">
-  <hgroup>
-    <h3>STRATEGY 1: RSI</h3>
-  </hgroup>
-  <article data-timings="">
-    <ul>
-<li>stock 2: CHK</li>
 </ul>
 
 <p><img src="assets/fig/unnamed-chunk-15-1.png" alt="plot of chunk unnamed-chunk-15"></p>
@@ -538,13 +506,28 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
     <h3>STRATEGY 1: RSI</h3>
   </hgroup>
   <article data-timings="">
-    <p>We can further analyze this RSI-3_4 strategy by getting the order book and retrieving the trade statistics:  </p>
+    <ul>
+<li>stock 2: CHK</li>
+</ul>
+
+<p><img src="assets/fig/unnamed-chunk-16-1.png" alt="plot of chunk unnamed-chunk-16"></p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
 <slide class="" id="slide-21" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 1: RSI</h3>
+  </hgroup>
+  <article data-timings="">
+    <p>We can further analyze this RSI-3_4 strategy by getting the order book and retrieving the trade statistics:  </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
   <hgroup>
     <h3>STRATEGY 1: RSI</h3>
   </hgroup>
@@ -726,7 +709,7 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-22" style="background:;">
+<slide class="" id="slide-23" style="background:;">
   <hgroup>
     <h3>STRATEGY 1: RSI</h3>
   </hgroup>
@@ -745,7 +728,7 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-23" style="background:;">
+<slide class="" id="slide-24" style="background:;">
   <hgroup>
     <h2>APPROACH</h2>
   </hgroup>
@@ -755,64 +738,89 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
 <p>Instead of using the RSI_3_4 as the oscillator, let&#39;s use a custom DVO with navg = 2 and a percentlookback period of 126 that we call DVO_2_126 . The trend following indicators SMA50 and SMA200 stay the same
  , as well as the signals, rules and settings of the strategy.  </p>
 
-<pre><code>##  [1] &quot;|              | 2013-09-03| 2013-09-04| 2013-09-05|&quot;
-##  [2] &quot;|:-------------|----------:|----------:|----------:|&quot;
-##  [3] &quot;|Open          |  43.030000|   42.16000|   42.19000|&quot;
-##  [4] &quot;|High          |  43.130000|   42.34000|   42.45000|&quot;
-##  [5] &quot;|Low           |  42.070000|   41.83000|   42.07000|&quot;
-##  [6] &quot;|Close         |  42.160000|   42.21000|   42.14000|&quot;
-##  [7] &quot;|SMA.SMA200    |  45.754900|   45.76115|   45.76425|&quot;
-##  [8] &quot;|SMA.SMA50     |  44.931400|   44.90420|   44.86880|&quot;
-##  [9] &quot;|DVO.DVO_2_126 |   6.349206|   15.87302|   53.17460|&quot;
-## [10] &quot;|longfilter    |   0.000000|    0.00000|    0.00000|&quot;
-## [11] &quot;|filterexit    |         NA|         NA|         NA|&quot;
-## [12] &quot;|longthreshold |   1.000000|    1.00000|    0.00000|&quot;
-## [13] &quot;|thresholdexit |   0.000000|    0.00000|    0.00000|&quot;
-## [14] &quot;|longentry     |   0.000000|    0.00000|    0.00000|&quot;
-## attr(,&quot;format&quot;)
-## [1] &quot;markdown&quot;
-## attr(,&quot;class&quot;)
-## [1] &quot;knit_asis&quot;
-## attr(,&quot;knit_cacheable&quot;)
-## [1] NA
-</code></pre>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
 
-<pre><code>##  [1] &quot;|              | 2013-09-03| 2013-09-04| 2013-09-05|&quot;
-##  [2] &quot;|:-------------|----------:|----------:|----------:|&quot;
-##  [3] &quot;|Open          |   26.07000|   26.09000|    26.1800|&quot;
-##  [4] &quot;|High          |   26.41000|   26.18000|    26.2400|&quot;
-##  [5] &quot;|Low           |   26.02000|   26.00000|    26.0200|&quot;
-##  [6] &quot;|Close         |   26.16000|   26.12000|    26.1700|&quot;
-##  [7] &quot;|SMA.SMA200    |   20.35310|   20.40175|    20.4495|&quot;
-##  [8] &quot;|SMA.SMA50     |   23.32000|   23.45040|    23.5780|&quot;
-##  [9] &quot;|DVO.DVO_2_126 |   30.15873|   40.47619|    53.1746|&quot;
-## [10] &quot;|longfilter    |    1.00000|    1.00000|     1.0000|&quot;
-## [11] &quot;|filterexit    |         NA|         NA|         NA|&quot;
-## [12] &quot;|longthreshold |    0.00000|    0.00000|     0.0000|&quot;
-## [13] &quot;|thresholdexit |    0.00000|    0.00000|     0.0000|&quot;
-## [14] &quot;|longentry     |    0.00000|    0.00000|     0.0000|&quot;
-## attr(,&quot;format&quot;)
-## [1] &quot;markdown&quot;
-## attr(,&quot;class&quot;)
-## [1] &quot;knit_asis&quot;
-## attr(,&quot;knit_cacheable&quot;)
-## [1] NA
-</code></pre>
-
-<pre><code>## [1] &quot;DVO strategy&quot;
-</code></pre>
-
-<pre><code>## [1] &quot;DVO strategy&quot;
-</code></pre>
-
-<pre><code>## [1] &quot;DVO strategy&quot;
+<slide class="" id="slide-25" style="background:;">
+  <article data-timings="">
+    <pre><code>## 
+## 
+## +---------------------+--------------+--------------+--------------+
+## |                     |  2013-09-03  |  2013-09-04  |  2013-09-05  |
+## +=====================+==============+==============+==============+
+## |        Open         |    43.03     |    42.16     |    42.19     |
+## +---------------------+--------------+--------------+--------------+
+## |        High         |    43.13     |    42.34     |    42.45     |
+## +---------------------+--------------+--------------+--------------+
+## |         Low         |    42.07     |    41.83     |    42.07     |
+## +---------------------+--------------+--------------+--------------+
+## |        Close        |    42.16     |    42.21     |    42.14     |
+## +---------------------+--------------+--------------+--------------+
+## |     SMA.SMA200      |    45.75     |    45.76     |    45.76     |
+## +---------------------+--------------+--------------+--------------+
+## |      SMA.SMA50      |    44.93     |     44.9     |    44.87     |
+## +---------------------+--------------+--------------+--------------+
+## |    DVO.DVO_2_126    |    6.349     |    15.87     |    53.17     |
+## +---------------------+--------------+--------------+--------------+
+## |     longfilter      |      0       |      0       |      0       |
+## +---------------------+--------------+--------------+--------------+
+## |     filterexit      |      NA      |      NA      |      NA      |
+## +---------------------+--------------+--------------+--------------+
+## |    longthreshold    |      1       |      1       |      0       |
+## +---------------------+--------------+--------------+--------------+
+## |    thresholdexit    |      0       |      0       |      0       |
+## +---------------------+--------------+--------------+--------------+
+## |      longentry      |      0       |      0       |      0       |
+## +---------------------+--------------+--------------+--------------+
+## 
+## Table: AEP Subset
 </code></pre>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-24" style="background:;">
+<slide class="" id="slide-26" style="background:;">
+  <article data-timings="">
+    <pre><code>## 
+## 
+## +---------------------+--------------+--------------+--------------+
+## |                     |  2013-09-03  |  2013-09-04  |  2013-09-05  |
+## +=====================+==============+==============+==============+
+## |        Open         |    26.07     |    26.09     |    26.18     |
+## +---------------------+--------------+--------------+--------------+
+## |        High         |    26.41     |    26.18     |    26.24     |
+## +---------------------+--------------+--------------+--------------+
+## |         Low         |    26.02     |      26      |    26.02     |
+## +---------------------+--------------+--------------+--------------+
+## |        Close        |    26.16     |    26.12     |    26.17     |
+## +---------------------+--------------+--------------+--------------+
+## |     SMA.SMA200      |    20.35     |     20.4     |    20.45     |
+## +---------------------+--------------+--------------+--------------+
+## |      SMA.SMA50      |    23.32     |    23.45     |    23.58     |
+## +---------------------+--------------+--------------+--------------+
+## |    DVO.DVO_2_126    |    30.16     |    40.48     |    53.17     |
+## +---------------------+--------------+--------------+--------------+
+## |     longfilter      |      1       |      1       |      1       |
+## +---------------------+--------------+--------------+--------------+
+## |     filterexit      |      NA      |      NA      |      NA      |
+## +---------------------+--------------+--------------+--------------+
+## |    longthreshold    |      0       |      0       |      0       |
+## +---------------------+--------------+--------------+--------------+
+## |    thresholdexit    |      0       |      0       |      0       |
+## +---------------------+--------------+--------------+--------------+
+## |      longentry      |      0       |      0       |      0       |
+## +---------------------+--------------+--------------+--------------+
+## 
+## Table: CHK Subset
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
   <hgroup>
     <h3>STRATEGY 2: DVO</h3>
   </hgroup>
@@ -821,17 +829,26 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
 
 <p>Performance of the systems:  </p>
 
-<ul>
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 2: DVO</h3>
+  </hgroup>
+  <article data-timings="">
+    <ul>
 <li>stock 1: AEP</li>
 </ul>
 
-<p><img src="assets/fig/unnamed-chunk-22-1.png" alt="plot of chunk unnamed-chunk-22"></p>
+<p><img src="assets/fig/unnamed-chunk-24-1.png" alt="plot of chunk unnamed-chunk-24"></p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-25" style="background:;">
+<slide class="" id="slide-29" style="background:;">
   <hgroup>
     <h3>STRATEGY 2: DVO</h3>
   </hgroup>
@@ -840,13 +857,13 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
 <li>stock 2: CHK</li>
 </ul>
 
-<p><img src="assets/fig/unnamed-chunk-23-1.png" alt="plot of chunk unnamed-chunk-23"></p>
+<p><img src="assets/fig/unnamed-chunk-25-1.png" alt="plot of chunk unnamed-chunk-25"></p>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-26" style="background:;">
+<slide class="" id="slide-30" style="background:;">
   <hgroup>
     <h3>STRATEGY 2: DVO</h3>
   </hgroup>
@@ -857,7 +874,7 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-27" style="background:;">
+<slide class="" id="slide-31" style="background:;">
   <hgroup>
     <h3>STRATEGY 2: DVO</h3>
   </hgroup>
@@ -881,8 +898,8 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
 </tr>
 <tr>
 <td align="left">Num.Txns</td>
-<td align="left">501</td>
-<td align="left">473</td>
+<td align="left">1449</td>
+<td align="left">1340</td>
 </tr>
 <tr>
 <td align="left">Num.Trades</td>
@@ -891,8 +908,8 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
 </tr>
 <tr>
 <td align="left">Net.Trading.PL</td>
-<td align="left">59.91</td>
-<td align="left">74.98</td>
+<td align="left">-40783.62</td>
+<td align="left">-20493.62</td>
 </tr>
 <tr>
 <td align="left">Avg.Trade.PL</td>
@@ -986,13 +1003,13 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
 </tr>
 <tr>
 <td align="left">Max.Drawdown</td>
-<td align="left">-30.13</td>
-<td align="left">-29.43</td>
+<td align="left">-40792.86</td>
+<td align="left">-20493.68</td>
 </tr>
 <tr>
 <td align="left">Profit.To.Max.Draw</td>
-<td align="left">1.988384</td>
-<td align="left">2.547740</td>
+<td align="left">-0.9997735</td>
+<td align="left">-0.9999971</td>
 </tr>
 <tr>
 <td align="left">Avg.WinLoss.Ratio</td>
@@ -1006,18 +1023,18 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
 </tr>
 <tr>
 <td align="left">Max.Equity</td>
-<td align="left">62.54</td>
-<td align="left">75.64</td>
+<td align="left">9.24</td>
+<td align="left">0.00</td>
 </tr>
 <tr>
 <td align="left">Min.Equity</td>
-<td align="left">-7.24</td>
-<td align="left">-0.75</td>
+<td align="left">-40783.62</td>
+<td align="left">-20493.68</td>
 </tr>
 <tr>
 <td align="left">End.Equity</td>
-<td align="left">59.91</td>
-<td align="left">74.98</td>
+<td align="left">-40783.62</td>
+<td align="left">-20493.62</td>
 </tr>
 </tbody></table>
 
@@ -1025,7 +1042,7 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-28" style="background:;">
+<slide class="" id="slide-32" style="background:;">
   <hgroup>
     <h3>STRATEGY 2: DVO</h3>
   </hgroup>
@@ -1039,8 +1056,8 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
 </thead><tbody>
 <tr>
 <td align="left">Annualized Sharpe Ratio (Rf=0%)</td>
-<td align="right">0.3210269</td>
-<td align="right">0.4282121</td>
+<td align="right">-4.327236</td>
+<td align="right">-3.669526</td>
 </tr>
 </tbody></table>
 
@@ -1048,7 +1065,7 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-29" style="background:;">
+<slide class="" id="slide-33" style="background:;">
   <hgroup>
     <h2>CONCLUSION</h2>
   </hgroup>
@@ -1064,7 +1081,7 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="" id="slide-30" style="background:;">
+<slide class="" id="slide-34" style="background:;">
   <hgroup>
     <h2>REFERENCES</h2>
   </hgroup>
@@ -1179,7 +1196,7 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=16 title='STRATEGY 1: RSI'>
+        data-slide=16 title='NA'>
          16
       </a>
     </li>
@@ -1221,25 +1238,25 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=23 title='APPROACH'>
+        data-slide=23 title='STRATEGY 1: RSI'>
          23
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=24 title='STRATEGY 2: DVO'>
+        data-slide=24 title='APPROACH'>
          24
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=25 title='STRATEGY 2: DVO'>
+        data-slide=25 title='NA'>
          25
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=26 title='STRATEGY 2: DVO'>
+        data-slide=26 title='NA'>
          26
       </a>
     </li>
@@ -1257,14 +1274,38 @@ legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quo
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=29 title='CONCLUSION'>
+        data-slide=29 title='STRATEGY 2: DVO'>
          29
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=30 title='REFERENCES'>
+        data-slide=30 title='STRATEGY 2: DVO'>
          30
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=31 title='STRATEGY 2: DVO'>
+         31
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=32 title='STRATEGY 2: DVO'>
+         32
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=33 title='CONCLUSION'>
+         33
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=34 title='REFERENCES'>
+         34
       </a>
     </li>
   </ul>
