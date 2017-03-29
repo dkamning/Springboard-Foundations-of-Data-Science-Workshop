@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PROJECT PRESENTATION</title>
+  <meta charset="utf-8">
+  <meta name="description" content="PROJECT PRESENTATION">
+  <meta name="author" content="Diane Kamning">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>PROJECT PRESENTATION</h1>
+    <h2>FINANCIAL TRADING STRATEGY</h2>
+    <p>Diane Kamning<br/></p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <article data-timings="">
+    
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>INTRODUCTION</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>This project aims at building a model that will ideally always output successful bids in the stock market. For that, it builds a model which gives better results when constantly trained in a sliding-time window.
+The goal is to design a simple financial trading strategy that will be profitable and that will provide a good risk-adjusted measure of return.  </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>DATA SETS</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Two datasets will be used here to test the strategy:</p>
+
+<ul>
+<li>The American Electric Company (AEP) dataset from Quandl</li>
+</ul>
+
+<table><thead>
+<tr>
+<th align="right">Open</th>
+<th align="right">High</th>
+<th align="right">Low</th>
+<th align="right">Close</th>
+<th align="right">Volume</th>
+<th align="right">Ex-Dividend</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="right">32.00</td>
+<td align="right">32.00</td>
+<td align="right">31.12</td>
+<td align="right">31.44</td>
+<td align="right">396900</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">31.38</td>
+<td align="right">31.94</td>
+<td align="right">31.38</td>
+<td align="right">31.81</td>
+<td align="right">325500</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">31.94</td>
+<td align="right">33.13</td>
+<td align="right">31.88</td>
+<td align="right">33.00</td>
+<td align="right">392200</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">32.75</td>
+<td align="right">33.69</td>
+<td align="right">32.75</td>
+<td align="right">33.19</td>
+<td align="right">433000</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">33.38</td>
+<td align="right">33.75</td>
+<td align="right">33.06</td>
+<td align="right">33.63</td>
+<td align="right">250500</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">33.63</td>
+<td align="right">33.81</td>
+<td align="right">33.44</td>
+<td align="right">33.50</td>
+<td align="right">307700</td>
+<td align="right">0</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>DATA SETS</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>The Chesapeake Energy Corporation (CHK) from Quandl.</li>
+</ul>
+
+<table><thead>
+<tr>
+<th align="right">Open</th>
+<th align="right">High</th>
+<th align="right">Low</th>
+<th align="right">Close</th>
+<th align="right">Volume</th>
+<th align="right">Ex-Dividend</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="right">2.31</td>
+<td align="right">2.38</td>
+<td align="right">2.25</td>
+<td align="right">2.25</td>
+<td align="right">369700</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">2.19</td>
+<td align="right">2.25</td>
+<td align="right">2.06</td>
+<td align="right">2.06</td>
+<td align="right">719400</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">2.12</td>
+<td align="right">2.19</td>
+<td align="right">1.94</td>
+<td align="right">2.06</td>
+<td align="right">807100</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">1.94</td>
+<td align="right">2.12</td>
+<td align="right">1.94</td>
+<td align="right">2.12</td>
+<td align="right">444900</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">2.06</td>
+<td align="right">2.12</td>
+<td align="right">2.06</td>
+<td align="right">2.06</td>
+<td align="right">207400</td>
+<td align="right">0</td>
+</tr>
+<tr>
+<td align="right">2.06</td>
+<td align="right">2.12</td>
+<td align="right">2.06</td>
+<td align="right">2.12</td>
+<td align="right">166700</td>
+<td align="right">0</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>DATA SETS</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>An initial exploration of the AEP dataset reveals 5 important fields:  </p>
+
+<ul>
+<li>The date</li>
+<li>The Open price</li>
+<li>The High price</li>
+<li>The Low price</li>
+<li><p>The Close price.  </p>
+
+<p>Some of the issues encountered with the data:  </p></li>
+<li><p>The presence of the adjusted closing price was confusing for some methods in the packages Quandstrat and xts, as those methods kept throwing errors. I had to remove the adjusted closing price from my data sets and just keep the closing price</p></li>
+<li><p>Some functions and arguments were not found because the Quandstrat package is not yet stable.</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>PRELIMINARY EXPLORATION</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Indicators are transformations of market data that give an insight into the overall market behavior by measuring current conditions and/or forecasting trends.  Among others, there are trend-following indicators which depict the general price direction, and oscillators used to discover on a scale of 0 to 100 short-term overbought (above 70 to 80) or oversold (below 30 to 20) conditions .
+  Combining trend-following indicators and oscillator/reversion indicators gives more insight into the data for this project. The preliminary oscillator used is an RSI (Relative Strength Index) with a 3-days lookback period. The preliminary trend indicators are 3 SMA (Simple Moving Average). After applying those indicators to the stocks, there are some periods of time during which none of the indicators seem to be right.  </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>PRELIMINARY EXPLORATION</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>TREND-FOLLOWING INDICATORS: SIMPLE MOVING AVERAGES</h3>
+
+<p>The SMA50 (Simple Moving Average) seems to better mimic the trend of the closing prices for both data sets</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>PRELIMINARY EXPLORATION</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>SMA AEP</li>
+</ul>
+
+<p><img src="assets/fig/unnamed-chunk-4-1.png" alt="plot of chunk unnamed-chunk-4"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>PRELIMINARY EXPLORATION</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>SMA CHK</li>
+</ul>
+
+<p><img src="assets/fig/unnamed-chunk-5-1.png" alt="plot of chunk unnamed-chunk-5"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>PRELIMINARY EXPLORATION</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>OSCILLATOR/REVERSION INDICATOR: RSI</h3>
+
+<p>An observation of the graphs of the stocks. RSI reveals that there are effectively periods of reversion (2013-09-03 to 2013-9-05 for example) that won&#39;t be captured by a trend-following indicator:</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>PRELIMINARY EXPLORATION</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>RSI AEP</li>
+</ul>
+
+<p><img src="assets/fig/unnamed-chunk-6-1.png" alt="plot of chunk unnamed-chunk-6"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>PRELIMINARY EXPLORATION</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>RSI CHK</li>
+</ul>
+
+<p><img src="assets/fig/unnamed-chunk-7-1.png" alt="plot of chunk unnamed-chunk-7"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>APPROACH</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>The main objective is to obtain a profit factor (monetary unit gained per monetary unit lost) above 1 after running the strategy on each of the data sets. 
+The approach here would be to combine both SMA50 and SMA200 with an oscillator to avoid false signals. The trend-following indicators would help catch up trends.<br>
+    The analysis is done on 16 years, from January 01st, 2000 to December 31st, 2016 . The time is Eastern time and the currency is US dollar.</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 1: RSI</h3>
+  </hgroup>
+  <article data-timings="">
+    <p>&quot;RSI Strategy&quot;, the initial strategy for this project, uses simple averages (over 50 days and over 200 days) with a custom RSI_3_4 indicator acting as an average between RSI3 and RSI4 . 
+  Signals help interpret how indicators interact with the market and with each other. Those signals are:  </p>
+
+<ul>
+<li>a comparison and a crossover , which show a buy signal when the 50-day simple moving average is above the 200-day simple moving average and show a sell signal when the 50-day simple moving average crosses below the 200-day simple moving average</li>
+<li>a threshold, which an oversold condition, thus a buy opportunity, for RSI_3_4 below 20, and an overbought condition, thus a sell opportunity, for RSI_3_4 above 80</li>
+<li>a combined comparison and threshold to buy when the 50-day simple moving average is above the 200-day simple moving average and RSI_3_4 is less than 20.<br></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-15" style="background:;">
+  <article data-timings="">
+    <pre><code>##  [1] &quot;|                | 2013-09-03| 2013-09-04| 2013-09-05|&quot;
+##  [2] &quot;|:---------------|----------:|----------:|----------:|&quot;
+##  [3] &quot;|Open            |   43.03000|   42.16000|   42.19000|&quot;
+##  [4] &quot;|High            |   43.13000|   42.34000|   42.45000|&quot;
+##  [5] &quot;|Low             |   42.07000|   41.83000|   42.07000|&quot;
+##  [6] &quot;|Close           |   42.16000|   42.21000|   42.14000|&quot;
+##  [7] &quot;|SMA.SMA200      |   45.75490|   45.76115|   45.76425|&quot;
+##  [8] &quot;|SMA.SMA50       |   44.93140|   44.90420|   44.86880|&quot;
+##  [9] &quot;|RSI_avg.RSI_3_4 |   22.85453|   26.99133|   24.42352|&quot;
+## [10] &quot;|longfilter      |    0.00000|    0.00000|    0.00000|&quot;
+## [11] &quot;|filterexit      |         NA|         NA|         NA|&quot;
+## [12] &quot;|longthreshold   |    0.00000|    0.00000|    0.00000|&quot;
+## [13] &quot;|thresholdexit   |    0.00000|    0.00000|    0.00000|&quot;
+## [14] &quot;|longentry       |    0.00000|    0.00000|    0.00000|&quot;
+## attr(,&quot;format&quot;)
+## [1] &quot;markdown&quot;
+## attr(,&quot;class&quot;)
+## [1] &quot;knit_asis&quot;
+## attr(,&quot;knit_cacheable&quot;)
+## [1] NA
+</code></pre>
+
+<p>--- Slide Separator </p>
+
+<pre><code>##  [1] &quot;|                | 2013-09-03| 2013-09-04| 2013-09-05|&quot;
+##  [2] &quot;|:---------------|----------:|----------:|----------:|&quot;
+##  [3] &quot;|Open            |   26.07000|   26.09000|   26.18000|&quot;
+##  [4] &quot;|High            |   26.41000|   26.18000|   26.24000|&quot;
+##  [5] &quot;|Low             |   26.02000|   26.00000|   26.02000|&quot;
+##  [6] &quot;|Close           |   26.16000|   26.12000|   26.17000|&quot;
+##  [7] &quot;|SMA.SMA200      |   20.35310|   20.40175|   20.44950|&quot;
+##  [8] &quot;|SMA.SMA50       |   23.32000|   23.45040|   23.57800|&quot;
+##  [9] &quot;|RSI_avg.RSI_3_4 |   61.91683|   58.61329|   62.21049|&quot;
+## [10] &quot;|longfilter      |    1.00000|    1.00000|    1.00000|&quot;
+## [11] &quot;|filterexit      |         NA|         NA|         NA|&quot;
+## [12] &quot;|longthreshold   |    0.00000|    0.00000|    0.00000|&quot;
+## [13] &quot;|thresholdexit   |    0.00000|    0.00000|    0.00000|&quot;
+## [14] &quot;|longentry       |    0.00000|    0.00000|    0.00000|&quot;
+## attr(,&quot;format&quot;)
+## [1] &quot;markdown&quot;
+## attr(,&quot;class&quot;)
+## [1] &quot;knit_asis&quot;
+## attr(,&quot;knit_cacheable&quot;)
+## [1] NA
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 1: RSI</h3>
+  </hgroup>
+  <article data-timings="">
+    <p>Rules help shape trading transactions at signal execution. They generate orders using market data, indicators and signals. This strategy has 2 rules:  </p>
+
+<ul>
+<li>an entry rule of 1 share for the combined comparison and threshold entry signals</li>
+<li>an exit rule for a treshold above 80.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 1: RSI</h3>
+  </hgroup>
+  <article data-timings="">
+    <p>Running this RSI_3_4 strategy on the AEP and the CHK over that trading period, yields profit factors above 1, meaning that the strategy is profitable:</p>
+
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="left">Symbol</th>
+<th align="right">Profit.Factor</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">stockAEP</td>
+<td align="left">stockAEP</td>
+<td align="right">1.952576</td>
+</tr>
+<tr>
+<td align="left">stockCHK</td>
+<td align="left">stockCHK</td>
+<td align="right">1.463076</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 1: RSI</h3>
+  </hgroup>
+  <article data-timings="">
+    <p>Let&#39;s take a look at the system performance for the 2 stocks:</p>
+
+<ul>
+<li>Stock 1: AEP<br></li>
+</ul>
+
+<h4>USING CHART.POSN()</h4>
+
+<h3>use chart.Posn to view your system&#39;s performance on the stocks</h3>
+
+<h1>This generates a crisp and informative visualization of the performance of your trading system over the course of the simulation.</h1>
+
+<h1>Chart trades against market data, position through time, and cumulative P&amp;L</h1>
+
+<h1>Produces a three-panel chart of time series charts that contains prices and transactions in the top panel, the resulting position in the second, and a cumulative profit-loss line chart in the third.</h1>
+
+<h1>The percent positive statistic lets you know how many of your trades were winners.</h1>
+
+<h3>Adding indicators to a chart.Posn() chart</h3>
+
+<h1>compute the SMA50</h1>
+
+<p>sma50 &lt;- SMA(x = Cl(stockAEP), n = 50)</p>
+
+<h1>compute the SMA200</h1>
+
+<p>sma200 &lt;- SMA(x = Cl(stockAEP), n = 200)</p>
+
+<h1>compute RSI_3_4</h1>
+
+<p>RSI3_4 &lt;- RSI_avg(price = Cl(stockAEP), n1 = 3, n2 = 4)</p>
+
+<h1>recreate the chart.Posn of the strategy</h1>
+
+<p>chart.Posn(Portfolio = portfolioRSI.st, Symbol = &quot;stockAEP&quot;, main = &quot;AEP Perfomance&quot;)</p>
+
+<h1>overlay the SMA50 on your plot as a blue line</h1>
+
+<p>add_TA(sma50, on = 1, col = &quot;cyan&quot;)</p>
+
+<h1>overlay the SMA200 on your plot as a red line</h1>
+
+<p>add_TA(sma200, on = 1, col = &quot;purple&quot;)</p>
+
+<h1>add the DVO_2_126 to the plot in a new window</h1>
+
+<p>add_TA(RSI3_4)
+legend(&#39;top&#39;, c(&quot;SMA50&quot;, &quot;SMA200&quot;, &quot;RSI 3_4&quot;),
+    lty = c(1, 1), lwd = c(2.5, 2.5), col = c(&#39;cyan&#39;, &#39;purple&#39;, &quot;black&quot;), cex = .50, horiz = TRUE)</p>
+
+<pre><code></code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 1: RSI</h3>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>stock 2: CHK</li>
+</ul>
+
+<p><img src="assets/fig/unnamed-chunk-15-1.png" alt="plot of chunk unnamed-chunk-15"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 1: RSI</h3>
+  </hgroup>
+  <article data-timings="">
+    <p>We can further analyze this RSI-3_4 strategy by getting the order book and retrieving the trade statistics:  </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-21" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 1: RSI</h3>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="left"></th>
+<th align="left">stockAEP</th>
+<th align="left">stockCHK</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Portfolio</td>
+<td align="left">RSI strategy</td>
+<td align="left">RSI strategy</td>
+</tr>
+<tr>
+<td align="left">Symbol</td>
+<td align="left">stockAEP</td>
+<td align="left">stockCHK</td>
+</tr>
+<tr>
+<td align="left">Num.Txns</td>
+<td align="left">169</td>
+<td align="left">177</td>
+</tr>
+<tr>
+<td align="left">Num.Trades</td>
+<td align="left">55</td>
+<td align="left">58</td>
+</tr>
+<tr>
+<td align="left">Net.Trading.PL</td>
+<td align="left">37.16</td>
+<td align="left">23.56</td>
+</tr>
+<tr>
+<td align="left">Avg.Trade.PL</td>
+<td align="left">0.6756364</td>
+<td align="left">0.4194828</td>
+</tr>
+<tr>
+<td align="left">Med.Trade.PL</td>
+<td align="left">1.05</td>
+<td align="left">1.13</td>
+</tr>
+<tr>
+<td align="left">Largest.Winner</td>
+<td align="left">7.92</td>
+<td align="left">5.86</td>
+</tr>
+<tr>
+<td align="left">Largest.Loser</td>
+<td align="left">-9.42</td>
+<td align="left">-19.36</td>
+</tr>
+<tr>
+<td align="left">Gross.Profits</td>
+<td align="left">76.17</td>
+<td align="left">76.87</td>
+</tr>
+<tr>
+<td align="left">Gross.Losses</td>
+<td align="left">-39.01</td>
+<td align="left">-52.54</td>
+</tr>
+<tr>
+<td align="left">Std.Dev.Trade.PL</td>
+<td align="left">2.915206</td>
+<td align="left">3.585156</td>
+</tr>
+<tr>
+<td align="left">Percent.Positive</td>
+<td align="left">70.90909</td>
+<td align="left">75.86207</td>
+</tr>
+<tr>
+<td align="left">Percent.Negative</td>
+<td align="left">29.09091</td>
+<td align="left">24.13793</td>
+</tr>
+<tr>
+<td align="left">Profit.Factor</td>
+<td align="left">1.952576</td>
+<td align="left">1.463076</td>
+</tr>
+<tr>
+<td align="left">Avg.Win.Trade</td>
+<td align="left">1.953077</td>
+<td align="left">1.747045</td>
+</tr>
+<tr>
+<td align="left">Med.Win.Trade</td>
+<td align="left">1.500</td>
+<td align="left">1.485</td>
+</tr>
+<tr>
+<td align="left">Avg.Losing.Trade</td>
+<td align="left">-2.438125</td>
+<td align="left">-3.752857</td>
+</tr>
+<tr>
+<td align="left">Med.Losing.Trade</td>
+<td align="left">-1.15</td>
+<td align="left">-1.97</td>
+</tr>
+<tr>
+<td align="left">Avg.Daily.PL</td>
+<td align="left">0.6756364</td>
+<td align="left">0.4194828</td>
+</tr>
+<tr>
+<td align="left">Med.Daily.PL</td>
+<td align="left">1.05</td>
+<td align="left">1.13</td>
+</tr>
+<tr>
+<td align="left">Std.Dev.Daily.PL</td>
+<td align="left">2.915206</td>
+<td align="left">3.585156</td>
+</tr>
+<tr>
+<td align="left">Ann.Sharpe</td>
+<td align="left">3.679120</td>
+<td align="left">1.857404</td>
+</tr>
+<tr>
+<td align="left">Max.Drawdown</td>
+<td align="left">-24.44</td>
+<td align="left">-39.85</td>
+</tr>
+<tr>
+<td align="left">Profit.To.Max.Draw</td>
+<td align="left">1.5204583</td>
+<td align="left">0.5912171</td>
+</tr>
+<tr>
+<td align="left">Avg.WinLoss.Ratio</td>
+<td align="left">0.8010569</td>
+<td align="left">0.4655241</td>
+</tr>
+<tr>
+<td align="left">Med.WinLoss.Ratio</td>
+<td align="left">1.3043478</td>
+<td align="left">0.7538071</td>
+</tr>
+<tr>
+<td align="left">Max.Equity</td>
+<td align="left">38.81</td>
+<td align="left">33.28</td>
+</tr>
+<tr>
+<td align="left">Min.Equity</td>
+<td align="left">-4.56</td>
+<td align="left">-6.57</td>
+</tr>
+<tr>
+<td align="left">End.Equity</td>
+<td align="left">37.16</td>
+<td align="left">23.56</td>
+</tr>
+</tbody></table>
+
+<table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">stockAEP.DailyEndEq</th>
+<th align="right">stockCHK.DailyEndEq</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Annualized Sharpe Ratio (Rf=0%)</td>
+<td align="right">0.1945513</td>
+<td align="right">0.1296419</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 1: RSI</h3>
+  </hgroup>
+  <article data-timings="">
+    <p>For both instruments, the profit factor (absolute value ratio of gross profits over gross losses ) is above 1 . Therefore, this strategy is profitable.
+\[Profit factor = Abs( gross profits / gross losses)\]  </p>
+
+<p>The Sharpe Ratio is a risk-adjusted measure of return.</p>
+
+<p>\[ Sharpe ratio = (Mean portfolio return - Risk-free rate ) / Standard deviation of portfolio return \]</p>
+
+<p>With the Quandstart R package,  there are ways to get the cash Sharpe Ratio (Sharpe Ratio from profit and loss) and the returns-based Sharpe Ratio (Sharpe Ratio from P&amp;L over initial equity) of a strategy.
+ The annualized returns-based Sharpe Ratios are low, the highest being ~ 0.23 on stock AEP. Let&#39;s try to increase the annualized returns-based Sharpe ratio by changing the oscillator of this strategy. </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-23" style="background:;">
+  <hgroup>
+    <h2>APPROACH</h2>
+  </hgroup>
+  <article data-timings="">
+    <h3>STRATEGY 2: DVO</h3>
+
+<p>Instead of using the RSI_3_4 as the oscillator, let&#39;s use a custom DVO with navg = 2 and a percentlookback period of 126 that we call DVO_2_126 . The trend following indicators SMA50 and SMA200 stay the same
+ , as well as the signals, rules and settings of the strategy.  </p>
+
+<pre><code>##  [1] &quot;|              | 2013-09-03| 2013-09-04| 2013-09-05|&quot;
+##  [2] &quot;|:-------------|----------:|----------:|----------:|&quot;
+##  [3] &quot;|Open          |  43.030000|   42.16000|   42.19000|&quot;
+##  [4] &quot;|High          |  43.130000|   42.34000|   42.45000|&quot;
+##  [5] &quot;|Low           |  42.070000|   41.83000|   42.07000|&quot;
+##  [6] &quot;|Close         |  42.160000|   42.21000|   42.14000|&quot;
+##  [7] &quot;|SMA.SMA200    |  45.754900|   45.76115|   45.76425|&quot;
+##  [8] &quot;|SMA.SMA50     |  44.931400|   44.90420|   44.86880|&quot;
+##  [9] &quot;|DVO.DVO_2_126 |   6.349206|   15.87302|   53.17460|&quot;
+## [10] &quot;|longfilter    |   0.000000|    0.00000|    0.00000|&quot;
+## [11] &quot;|filterexit    |         NA|         NA|         NA|&quot;
+## [12] &quot;|longthreshold |   1.000000|    1.00000|    0.00000|&quot;
+## [13] &quot;|thresholdexit |   0.000000|    0.00000|    0.00000|&quot;
+## [14] &quot;|longentry     |   0.000000|    0.00000|    0.00000|&quot;
+## attr(,&quot;format&quot;)
+## [1] &quot;markdown&quot;
+## attr(,&quot;class&quot;)
+## [1] &quot;knit_asis&quot;
+## attr(,&quot;knit_cacheable&quot;)
+## [1] NA
+</code></pre>
+
+<pre><code>##  [1] &quot;|              | 2013-09-03| 2013-09-04| 2013-09-05|&quot;
+##  [2] &quot;|:-------------|----------:|----------:|----------:|&quot;
+##  [3] &quot;|Open          |   26.07000|   26.09000|    26.1800|&quot;
+##  [4] &quot;|High          |   26.41000|   26.18000|    26.2400|&quot;
+##  [5] &quot;|Low           |   26.02000|   26.00000|    26.0200|&quot;
+##  [6] &quot;|Close         |   26.16000|   26.12000|    26.1700|&quot;
+##  [7] &quot;|SMA.SMA200    |   20.35310|   20.40175|    20.4495|&quot;
+##  [8] &quot;|SMA.SMA50     |   23.32000|   23.45040|    23.5780|&quot;
+##  [9] &quot;|DVO.DVO_2_126 |   30.15873|   40.47619|    53.1746|&quot;
+## [10] &quot;|longfilter    |    1.00000|    1.00000|     1.0000|&quot;
+## [11] &quot;|filterexit    |         NA|         NA|         NA|&quot;
+## [12] &quot;|longthreshold |    0.00000|    0.00000|     0.0000|&quot;
+## [13] &quot;|thresholdexit |    0.00000|    0.00000|     0.0000|&quot;
+## [14] &quot;|longentry     |    0.00000|    0.00000|     0.0000|&quot;
+## attr(,&quot;format&quot;)
+## [1] &quot;markdown&quot;
+## attr(,&quot;class&quot;)
+## [1] &quot;knit_asis&quot;
+## attr(,&quot;knit_cacheable&quot;)
+## [1] NA
+</code></pre>
+
+<pre><code>## [1] &quot;DVO strategy&quot;
+</code></pre>
+
+<pre><code>## [1] &quot;DVO strategy&quot;
+</code></pre>
+
+<pre><code>## [1] &quot;DVO strategy&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 2: DVO</h3>
+  </hgroup>
+  <article data-timings="">
+    <p>Let&#39;s run the DVO strategy.</p>
+
+<p>Performance of the systems:  </p>
+
+<ul>
+<li>stock 1: AEP</li>
+</ul>
+
+<p><img src="assets/fig/unnamed-chunk-22-1.png" alt="plot of chunk unnamed-chunk-22"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-25" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 2: DVO</h3>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li>stock 2: CHK</li>
+</ul>
+
+<p><img src="assets/fig/unnamed-chunk-23-1.png" alt="plot of chunk unnamed-chunk-23"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-26" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 2: DVO</h3>
+  </hgroup>
+  <article data-timings="">
+    <p>Analyzing this DVO strategy, we get the following trade metrics:  </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-27" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 2: DVO</h3>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="left"></th>
+<th align="left">stockAEP</th>
+<th align="left">stockCHK</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Portfolio</td>
+<td align="left">DVO strategy</td>
+<td align="left">DVO strategy</td>
+</tr>
+<tr>
+<td align="left">Symbol</td>
+<td align="left">stockAEP</td>
+<td align="left">stockCHK</td>
+</tr>
+<tr>
+<td align="left">Num.Txns</td>
+<td align="left">501</td>
+<td align="left">473</td>
+</tr>
+<tr>
+<td align="left">Num.Trades</td>
+<td align="left">185</td>
+<td align="left">184</td>
+</tr>
+<tr>
+<td align="left">Net.Trading.PL</td>
+<td align="left">59.91</td>
+<td align="left">74.98</td>
+</tr>
+<tr>
+<td align="left">Avg.Trade.PL</td>
+<td align="left">0.3238378</td>
+<td align="left">0.4085326</td>
+</tr>
+<tr>
+<td align="left">Med.Trade.PL</td>
+<td align="left">0.52</td>
+<td align="left">0.47</td>
+</tr>
+<tr>
+<td align="left">Largest.Winner</td>
+<td align="left">9.06</td>
+<td align="left">9.33</td>
+</tr>
+<tr>
+<td align="left">Largest.Loser</td>
+<td align="left">-11.12</td>
+<td align="left">-16.16</td>
+</tr>
+<tr>
+<td align="left">Gross.Profits</td>
+<td align="left">173.49</td>
+<td align="left">176.69</td>
+</tr>
+<tr>
+<td align="left">Gross.Losses</td>
+<td align="left">-113.58</td>
+<td align="left">-101.52</td>
+</tr>
+<tr>
+<td align="left">Std.Dev.Trade.PL</td>
+<td align="left">2.352974</td>
+<td align="left">2.522341</td>
+</tr>
+<tr>
+<td align="left">Percent.Positive</td>
+<td align="left">70.81081</td>
+<td align="left">72.28261</td>
+</tr>
+<tr>
+<td align="left">Percent.Negative</td>
+<td align="left">29.18919</td>
+<td align="left">26.63043</td>
+</tr>
+<tr>
+<td align="left">Profit.Factor</td>
+<td align="left">1.527470</td>
+<td align="left">1.740445</td>
+</tr>
+<tr>
+<td align="left">Avg.Win.Trade</td>
+<td align="left">1.324351</td>
+<td align="left">1.328496</td>
+</tr>
+<tr>
+<td align="left">Med.Win.Trade</td>
+<td align="left">0.98</td>
+<td align="left">0.91</td>
+</tr>
+<tr>
+<td align="left">Avg.Losing.Trade</td>
+<td align="left">-2.103333</td>
+<td align="left">-2.071837</td>
+</tr>
+<tr>
+<td align="left">Med.Losing.Trade</td>
+<td align="left">-1.21</td>
+<td align="left">-0.92</td>
+</tr>
+<tr>
+<td align="left">Avg.Daily.PL</td>
+<td align="left">0.3238378</td>
+<td align="left">0.4085326</td>
+</tr>
+<tr>
+<td align="left">Med.Daily.PL</td>
+<td align="left">0.52</td>
+<td align="left">0.47</td>
+</tr>
+<tr>
+<td align="left">Std.Dev.Daily.PL</td>
+<td align="left">2.352974</td>
+<td align="left">2.522341</td>
+</tr>
+<tr>
+<td align="left">Ann.Sharpe</td>
+<td align="left">2.184795</td>
+<td align="left">2.571125</td>
+</tr>
+<tr>
+<td align="left">Max.Drawdown</td>
+<td align="left">-30.13</td>
+<td align="left">-29.43</td>
+</tr>
+<tr>
+<td align="left">Profit.To.Max.Draw</td>
+<td align="left">1.988384</td>
+<td align="left">2.547740</td>
+</tr>
+<tr>
+<td align="left">Avg.WinLoss.Ratio</td>
+<td align="left">0.6296440</td>
+<td align="left">0.6412167</td>
+</tr>
+<tr>
+<td align="left">Med.WinLoss.Ratio</td>
+<td align="left">0.8099174</td>
+<td align="left">0.9891304</td>
+</tr>
+<tr>
+<td align="left">Max.Equity</td>
+<td align="left">62.54</td>
+<td align="left">75.64</td>
+</tr>
+<tr>
+<td align="left">Min.Equity</td>
+<td align="left">-7.24</td>
+<td align="left">-0.75</td>
+</tr>
+<tr>
+<td align="left">End.Equity</td>
+<td align="left">59.91</td>
+<td align="left">74.98</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-28" style="background:;">
+  <hgroup>
+    <h3>STRATEGY 2: DVO</h3>
+  </hgroup>
+  <article data-timings="">
+    <table><thead>
+<tr>
+<th align="left"></th>
+<th align="right">stockAEP.DailyEndEq</th>
+<th align="right">stockCHK.DailyEndEq</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Annualized Sharpe Ratio (Rf=0%)</td>
+<td align="right">0.3210269</td>
+<td align="right">0.4282121</td>
+</tr>
+</tbody></table>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-29" style="background:;">
+  <hgroup>
+    <h2>CONCLUSION</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>On the same period of time, the same instruments/stocks and the strategy settings, the RSI strategy has a higher profit factor compared to the DVO strategy for each of the stocks respectively. 
+  However, there are more transactions in the DVO strategy and its annualized sharpe ratios are much better than the ones of the RSI strategy. 
+  Therefore, the absolute value of the gross profits over gross losses is higher in the RSI strategy for each respective stok, while the return per unit of risk is better in the DVO strategy.  </p>
+
+<p>Nonetheless, is that enough to select one strategy over the other? Would an entry rule with an order sizing functon instead of a single share considerably improve one strategy over 
+  the other in terms of profit and risk-adjusted return?</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-30" style="background:;">
+  <hgroup>
+    <h2>REFERENCES</h2>
+  </hgroup>
+  <article data-timings="">
+    <ul>
+<li><p><a href="https://www.r-bloggers.com/quantitative-trading-strategy-using-r-a-step-by-step-guide/">Quantitative Trading Strategy Using R: A Step by Step Guide</a>  </p></li>
+<li><p><a href="http://www.investopedia.com/articles/active-trading/041814/four-most-commonlyused-indicators-trend-trading.asp">Investopedia 4 most common indicators</a></p></li>
+<li><p><a href="http://www.investopedia.com/terms/o/oscillator.asp">Oscillators</a> </p></li>
+<li><p><a href="http://www.investopedia.com/terms/m/momentum.asp">Momentums</a></p></li>
+<li><p><a href="http://www.investopedia.com/terms/s/sharperatio.asp?ad=dirN&amp;qo=investopediaSiteSearch&amp;qsrc=0&amp;o=40186">Sharpe Ratio</a></p></li>
+<li><p><a href="http://www.investopedia.com/articles/investing/062113/understanding-profit-metrics-gross-operating-and-net-profits.asp?ad=dirN&amp;qo=investopediaSiteSearch&amp;qsrc=0&amp;o=40186">Understanding profit metrics</a></p></li>
+<li><p><a href="https://www.r-bloggers.com/trend-vigor-part-iii-atr-position-sizing-annualized-sharpe-above-1-4-and-why-leverage-is-pointless/">Trend Vigor Part III: ATR position sizing, Annualized Sharpe above 1.4, and Why Leverage Is Pointless </a></p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='NA'>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='INTRODUCTION'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='DATA SETS'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='DATA SETS'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='DATA SETS'>
+         5
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=6 title='PRELIMINARY EXPLORATION'>
+         6
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=7 title='PRELIMINARY EXPLORATION'>
+         7
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=8 title='PRELIMINARY EXPLORATION'>
+         8
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=9 title='PRELIMINARY EXPLORATION'>
+         9
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=10 title='PRELIMINARY EXPLORATION'>
+         10
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=11 title='PRELIMINARY EXPLORATION'>
+         11
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=12 title='PRELIMINARY EXPLORATION'>
+         12
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=13 title='APPROACH'>
+         13
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=14 title='STRATEGY 1: RSI'>
+         14
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=15 title='NA'>
+         15
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=16 title='STRATEGY 1: RSI'>
+         16
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=17 title='STRATEGY 1: RSI'>
+         17
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=18 title='STRATEGY 1: RSI'>
+         18
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=19 title='STRATEGY 1: RSI'>
+         19
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=20 title='STRATEGY 1: RSI'>
+         20
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=21 title='STRATEGY 1: RSI'>
+         21
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=22 title='STRATEGY 1: RSI'>
+         22
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=23 title='APPROACH'>
+         23
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=24 title='STRATEGY 2: DVO'>
+         24
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=25 title='STRATEGY 2: DVO'>
+         25
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=26 title='STRATEGY 2: DVO'>
+         26
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=27 title='STRATEGY 2: DVO'>
+         27
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=28 title='STRATEGY 2: DVO'>
+         28
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=29 title='CONCLUSION'>
+         29
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=30 title='REFERENCES'>
+         30
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>

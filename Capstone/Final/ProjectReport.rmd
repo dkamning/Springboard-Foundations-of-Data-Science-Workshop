@@ -9,8 +9,10 @@ output:
     number_sections: true
 mainfont: Times New Roman
 fontsize: 12pt
+urlcolor: blue
 header-includes:
   - \setlength\parindent{24pt}
+  - \usepackage{color}
 ---
 
 \pagebreak
@@ -54,19 +56,19 @@ library(xtable)
 #### Load scripts ####
 #getwd()
 #setwd('C:/Users/d_kamning/OneDrive for Business/Private/Springboard/Capstone')
-source('C:/Users/d_kamning/OneDrive for Business/Private/Springboard/Capstone/Final/functions_util.R')
+source('F:/Springboard-Foundations-of-Data-Science-Workshop/Capstone/Final/functions_util.R')
 
 
 #### LOAD DATA ####
-### stockOne is AEP while stockTwo is CHK (Chesapeake Energy Corp.) ###
-stockOne <- Quandl("WIKI/AEP", start_date = "2000-01-01", end_date = "2017-01-31", type = "xts")
-head(stockOne)
-stockOne <- stockOne[, c(1, 2, 3, 4, 5, 6)]
+### stockAEP is AEP while stockCHK is CHK (Chesapeake Energy Corp.) ###
+stockAEP <- Quandl("WIKI/AEP", start_date = "2000-01-01", end_date = "2017-01-31", type = "xts")
+head(stockAEP)
+stockAEP <- stockAEP[, c(1, 2, 3, 4, 5, 6)]
 
 
-stockTwo <- Quandl("WIKI/CHK", start_date = "2000-01-01", end_date = "2017-01-31", type = "xts")
-head(stockTwo)
-stockTwo <- stockTwo[, c(1, 2, 3, 4, 5, 6)]
+stockCHK <- Quandl("WIKI/CHK", start_date = "2000-01-01", end_date = "2017-01-31", type = "xts")
+head(stockCHK)
+stockCHK <- stockCHK[, c(1, 2, 3, 4, 5, 6)]
 ```
 
 # INTRODUCTION  
@@ -81,12 +83,12 @@ The goal is to design a simple financial trading strategy that will be profitabl
 
 - The American Electric Company (AEP) dataset from Quandl
 ```{r, echo=FALSE, message = FALSE}
-knitr::kable(head(stockOne) )
+knitr::kable(head(stockAEP) )
 ```  
   
 - The Chesapeake Energy Corporation (CHK) from Quandl.
 ```{r, echo=FALSE, message = FALSE}
-knitr::kable(head(stockTwo))
+knitr::kable(head(stockCHK))
 ```
   
   An initial exploration of the AEP dataset reveals 5 important fields:  
@@ -118,10 +120,10 @@ knitr::kable(head(stockTwo))
 ```{r, echo=FALSE}
 #### VISUALIZE DATA ####
 ### Stock 1 SMA
-plot(Cl(stockOne), type = 'l', xlab = 'Date', ylab = 'Closing price', main = 'AEP closing price trend with SMA')
-lines(SMA(Cl(stockOne), n = 200), col = "red")
-lines(SMA(Cl(stockOne), n = 300), col = "purple")
-lines(SMA(Cl(stockOne), n = 50), col = "cyan")
+plot(Cl(stockAEP), type = 'l', xlab = 'Date', ylab = 'Closing price', main = 'AEP closing price trend with SMA')
+lines(SMA(Cl(stockAEP), n = 200), col = "red")
+lines(SMA(Cl(stockAEP), n = 300), col = "purple")
+lines(SMA(Cl(stockAEP), n = 50), col = "cyan")
 legend('topleft', c("SMA200", "SMA300", "SMA50", "Closing price"),
     lty = c(1, 1), lwd = c(2.5, 2.5), col = c('red', 'purple', 'cyan', "black"), cex = .50)
 ```
@@ -131,10 +133,10 @@ legend('topleft', c("SMA200", "SMA300", "SMA50", "Closing price"),
 ```{r, echo=FALSE}
 #### VISUALIZE DATA ####
 ### Stock 2 SMA
-plot(Cl(stockTwo), type = 'l', xlab = 'Date', ylab = 'Closing price', main = 'CHK closing price trend with SMA')
-lines(SMA(Cl(stockTwo), n = 200), col = "red")
-lines(SMA(Cl(stockTwo), n = 300), col = "purple")
-lines(SMA(Cl(stockTwo), n = 50), col = "cyan")
+plot(Cl(stockCHK), type = 'l', xlab = 'Date', ylab = 'Closing price', main = 'CHK closing price trend with SMA')
+lines(SMA(Cl(stockCHK), n = 200), col = "red")
+lines(SMA(Cl(stockCHK), n = 300), col = "purple")
+lines(SMA(Cl(stockCHK), n = 50), col = "cyan")
 legend('topleft', c("SMA200", "SMA300", "SMA50", "Closing price"),
     lty = c(1, 1), lwd = c(2.5, 2.5), col = c('red', 'purple', 'cyan', "black"), cex = .50)
 ```
@@ -143,14 +145,15 @@ legend('topleft', c("SMA200", "SMA300", "SMA50", "Closing price"),
 
 ## OSCILLATOR/REVERSION INDICATOR: RSI
     
-  An observation of the graphs of the stocks’ RSI reveals that there are effectively periods of reversion (2013-09-03 to 2013-9-05 for example) that won’t be captured by a trend-following indicator:
+  An observation of the graphs of the stocks. RSI reveals that there are effectively periods of reversion (2013-09-03 to 2013-9-05 for example) that won't be captured by a trend-following indicator:
 
 - RSI AEP
 
 ```{r, echo=FALSE}
 #### VISUALIZE DATA ####
 ### Stock 1 RSI
-plot(RSI(Cl(stockOne), n = 3), type = "l", xlab = 'Date', ylab = 'Closing price', main = 'AEP closing price RSI with 3-days lookback')
+plot(RSI(Cl(stockAEP), n = 3), type = "l", xlab = 'Date', ylab = 'Closing price', main = 'AEP closing price RSI with 3-days lookback')
+#zoom_Chart("2013-09-03/2013-9-05")
 ```
 
 - RSI CHK
@@ -158,21 +161,21 @@ plot(RSI(Cl(stockOne), n = 3), type = "l", xlab = 'Date', ylab = 'Closing price'
 ```{r, echo=FALSE}
 #### VISUALIZE DATA ####
 ### Stock 2 RSI
-plot(RSI(Cl(stockTwo), n = 3), type = "l", xlab = 'Date', ylab = 'Closing price', main = 'CHK closing price RSI with 3-days lookback')
+plot(RSI(Cl(stockCHK), n = 3), type = "l", xlab = 'Date', ylab = 'Closing price', main = 'CHK closing price RSI with 3-days lookback')
 ```
 
 
 # APPROACH
   
-  The main objective is to obtain a profit factor above 1 after running the strategy on each of the data sets. 
+  The main objective is to obtain a profit factor (monetary unit gained per monetary unit lost) above 1 after running the strategy on each of the data sets. 
 The approach here would be to combine both SMA50 and SMA200 with an oscillator to avoid false signals. The trend-following indicators would help catch up trends.  
-	The analysis is done on 13 years, from January 01s, 2013 to December 31st, 2016 . The time is Eastern time and the currency is US dollar.
+	The analysis is done on 16 years, from January 01st, 2000 to December 31st, 2016 . The time is Eastern time and the currency is US dollar.
 
 ```{r, echo=FALSE, message=FALSE, include=FALSE}
 #### INITIALIZE STRATEGY ####
 ### Create initdate, from, and to charater strings
 initdate <- "2000-01-01"
-from <- "2003-01-01"
+from <- "2000-01-01"
 to <- "2016-12-31"
 
 ### Set the timezone to UTC
@@ -183,7 +186,7 @@ Sys.setenv(TZ = "EST")
 currency("USD")
 
 ### Use the stock command to initialize and set currency to USD
-stock(c("stockOne", "stockTwo"), currency = "USD")
+stock(c("stockAEP", "stockCHK"), currency = "USD")
 
 
 ### Define your trade size and initial equity
@@ -200,7 +203,7 @@ rm.strat(strategyRSI.st)
 
 
 ### initialize the portfolio
-initPortf(portfolioRSI.st, symbols = c("stockOne", "stockTwo"), initDate = initdate, currency = "USD")
+initPortf(portfolioRSI.st, symbols = c("stockAEP", "stockCHK"), initDate = initdate, currency = "USD")
 
 ### initialize the account
 initAcct(accountRSI.st, portfolios = portfolioRSI.st, initDate = initdate, currency = "USD", initEq = initeq)
@@ -220,7 +223,7 @@ strategy(strategyRSI.st, store = TRUE)
 
 - a comparison and a crossover , which show a buy signal when the 50-day simple moving average is above the 200-day simple moving average and show a sell signal when the 50-day simple moving average crosses below the 200-day simple moving average
 - a threshold, which an oversold condition, thus a buy opportunity, for RSI_3_4 below 20, and an overbought condition, thus a sell opportunity, for RSI_3_4 above 80
-- a combined comparison and threshold to buy when the 50-day simple moving average is above the 200-day simple moving average and RSI_3_4 is less then 20.  
+- a combined comparison and threshold to buy when the 50-day simple moving average is above the 200-day simple moving average and RSI_3_4 is less than 20.  
 
 ```{r, echo=FALSE, results='hide'}
 #### ADD SMA INDICATORS (TREND) ####
@@ -322,19 +325,30 @@ add.signal(strategyRSI.st, name = "sigFormula",
                label = "longentry")
 
 # Test and Subset your data between Sep. 1 and Sep. 5 of 2013
-test_init <- applyIndicators(strategyRSI.st, mktdata = OHLC(stockOne))
+test_init <- applyIndicators(strategyRSI.st, mktdata = OHLC(stockAEP))
 test <- applySignals(strategy = strategyRSI.st, mktdata = test_init)
-knitr::kable(head(test))
 test_subset <- test["2013-09-01/2013-09-05"]
-knitr::kable(head(test_subset))
- 
-test_init2 <- applyIndicators(strategyRSI.st, mktdata = OHLC(stockTwo))
+
+test_init2 <- applyIndicators(strategyRSI.st, mktdata = OHLC(stockCHK))
 test2 <- applySignals(strategy = strategyRSI.st, mktdata = test_init2)
-knitr::kable(head(test2))
 test_subset2 <- test2["2013-09-01/2013-09-05"]
-knitr::kable(head(test_subset2))
+```
+
+  
+  
+
+```{r, echo=FALSE, message = FALSE}
+print(knitr::kable(t(test_subset), caption = "AEP Subset"))
+```
+
+  
+  
+
+```{r, echo=FALSE, message = FALSE}
+print(knitr::kable(t(test_subset2), caption = "CHK Subset"))
 ```
   
+
   Rules help shape trading transactions at signal execution. They generate orders using market data, indicators and signals. This strategy has 2 rules:  
 
 - an entry rule of 1 share for the combined comparison and threshold entry signals
@@ -379,7 +393,7 @@ add.rule(strategyRSI.st, name = "ruleSignal",
              type = "enter")
 ```
   
-  Running this RSI_3_4 strategy on the AES and the CHK over those 13 years, yields profit factors above 1, meaning that the strategy is profitable:
+  Running this RSI_3_4 strategy on the AEP and the CHK over that trading period, yields profit factors above 1, meaning that the strategy is profitable:
 
 ```{r, echo=FALSE, include = FALSE}
 #### RUNNING YOUR STRATEGY ####
@@ -399,6 +413,9 @@ updateEndEq(accountRSI.st)
 # Get the tradeStats for your portfolio
 tstats <- tradeStats(Portfolios = portfolioRSI.st)
 
+```
+
+```{r, echo=FALSE, message = FALSE}
 # Print the profit factor
 #tstats$Profit.Factor
 knitr::kable(tstats[, c("Symbol", "Profit.Factor")])
@@ -406,9 +423,9 @@ knitr::kable(tstats[, c("Symbol", "Profit.Factor")])
   
   Let's take a look at the system performance for the 2 stocks:
 
-- Stock 1: AES  
+- Stock 1: AEP  
 
-```{r, echo=FALSE, include = FALSE}
+```{r, echo=FALSE, fig.keep = 'last'}
 
 #### USING CHART.POSN() ####
 ### use chart.Posn to view your system's performance on the stocks
@@ -417,26 +434,23 @@ knitr::kable(tstats[, c("Symbol", "Profit.Factor")])
 # Produces a three-panel chart of time series charts that contains prices and transactions in the top panel, the resulting position in the second, and a cumulative profit-loss line chart in the third. 
 # The percent positive statistic lets you know how many of your trades were winners. 
 
-chart.Posn(Portfolio = portfolioRSI.st, Symbol = "stockOne")
 ### Adding indicators to a chart.Posn() chart ##########
 # compute the SMA50
-sma50 <- SMA(x = Cl(stockOne), n = 50)
+sma50 <- SMA(x = Cl(stockAEP), n = 50)
 # compute the SMA200
-sma200 <- SMA(x = Cl(stockOne), n = 200)
-# compute the DVO_2_126 with an navg of 2 and a percentlookback of 126
-dvo <- DVO(HLC = HLC(stockOne), navg = 2, percentlookback = 126)
+sma200 <- SMA(x = Cl(stockAEP), n = 200)
+# compute RSI_3_4
+RSI3_4 <- RSI_avg(price = Cl(stockAEP), n1 = 3, n2 = 4)
 # recreate the chart.Posn of the strategy 
-chart.Posn(Portfolio = portfolioRSI.st, Symbol = "stockOne")
+chart.Posn(Portfolio = portfolioRSI.st, Symbol = "stockAEP", main = "AEP Perfomance")
 # overlay the SMA50 on your plot as a blue line
-add_TA(sma50, on = 1, col = "blue")
+add_TA(sma50, on = 1, col = "cyan")
 # overlay the SMA200 on your plot as a red line
-add_TA(sma200, on = 1, col = "red")
+add_TA(sma200, on = 1, col = "purple")
 # add the DVO_2_126 to the plot in a new window
-```
-
-```{r, echo=FALSE, message=FALSE}
-
-add_TA(dvo)
+add_TA(RSI3_4)
+legend('top', c("SMA50", "SMA200", "RSI 3_4"),
+    lty = c(1, 1), lwd = c(2.5, 2.5), col = c('cyan', 'purple', "black"), cex = .50, horiz = TRUE)
 ```
 
   
@@ -444,22 +458,23 @@ add_TA(dvo)
 
 ```{r, echo=FALSE, message=FALSE, fig.keep = 'last'}
 
-chart.Posn(Portfolio = portfolioRSI.st, Symbol = "stockTwo")
 ### Adding indicators to a chart.Posn() chart ##########
 # compute the SMA50
-sma50 <- SMA(x = Cl(stockOne), n = 50)
+sma50 <- SMA(x = Cl(stockCHK), n = 50)
 # compute the SMA200
-sma200 <- SMA(x = Cl(stockOne), n = 200)
-# compute the DVO_2_126 with an navg of 2 and a percentlookback of 126
-dvo <- DVO(HLC = HLC(stockOne), navg = 2, percentlookback = 126)
+sma200 <- SMA(x = Cl(stockCHK), n = 200)
+# compute RSI_3_4
+RSI3_4 <- RSI_avg(price = Cl(stockCHK), n1 = 3, n2 = 4)
 # recreate the chart.Posn of the strategy 
-chart.Posn(Portfolio = portfolioRSI.st, Symbol = "stockTwo")
+chart.Posn(Portfolio = portfolioRSI.st, Symbol = "stockCHK",  main = "CHK Performance" )
 # overlay the SMA50 on your plot as a blue line
-add_TA(sma50, on = 1, col = "blue")
+add_TA(sma50, on = 1, col = "cyan")
 # overlay the SMA200 on your plot as a red line
-add_TA(sma200, on = 1, col = "red")
+add_TA(sma200, on = 1, col = "purple")
 # add the DVO_2_126 to the plot in a new window
-add_TA(dvo)
+add_TA(RSI3_4, col = "black" )
+legend('top', c("SMA50", "SMA200", "RSI 3_4"),
+    lty = c(1, 1), lwd = c(2.5, 2.5), col = c('cyan', 'purple', "black"), cex = .50, horiz = TRUE)
 ```
   
   We can further analyze this RSI-3_4 strategy by getting the order book and retrieving the trade statistics:  
@@ -471,10 +486,10 @@ add_TA(dvo)
 getOrderBook(portfolioRSI.st)  
 
 # Update Portfolio
-updatePortf(portfolioRSI.st, Symbol = c("stockOne", "stockTwo"))
+updatePortf(portfolioRSI.st, Symbol = c("stockAEP", "stockCHK"))
 
 # Strategy output with trdeStats
-tradeStats(portfolioRSI.st, Symbol = c("stockOne", "stockTwo"))
+tradeStats(portfolioRSI.st, Symbol = c("stockAEP", "stockCHK"))
 ```
 
 ```{r, echo=FALSE, message = FALSE}
@@ -482,6 +497,12 @@ knitr::kable(t(tradeStats(portfolioRSI.st)))
 
 #### COMPUTE SHARPE RATIO ####
 ### A Sharpe ratio is a metric that compares the average reward to the average risk taken. Generally, a Sharpe ratio above 1 is a marker of a strong strategy. 
+# Cash Sharpe Ratio
+#portpl <- .blotter$portfolio.firststrat$summary$Net.Trading.PL
+#SharpeRatio.annualized(portpl, geometric = FALSE)
+#portplRSI <- .blotter$portfolioRSI.strategyRSI$summary$Net.Trading.PL
+#knitr::kable(SharpeRatio.annualized(portplRSI, geometric = FALSE) )
+
 # Get instrument returns
 instretsRSI <- PortfReturns(portfolioRSI.st)
 
@@ -492,14 +513,15 @@ knitr::kable(SharpeRatio.annualized(instretsRSI, geometric = FALSE))
   
   For both instruments, the profit factor (absolute value ratio of gross profits over gross losses ) is above 1 . Therefore, this strategy is profitable.
 
-Profit factor = Abs( gross profits / gross losses)  
+$$Profit factor = Abs( gross profits / gross losses)$$  
   
-  The sharpe ratio is a risk-adjusted measure of return.
+  The Sharpe Ratio is a risk-adjusted measure of return.
 
-Sharpe ratio = (Mean portfolio return - Risk-free rate ) / Standard deviation of portfolio return
+$$ Sharpe ratio = (Mean portfolio return - Risk-free rate ) / Standard deviation of portfolio return $$
 
   
-  The annualized sharpe ratios are low, the highest being ~ 0.23 on stock AEP. Let's try to increase the annualized sharpe ratio by changing the oscillator of this strategy. 
+ With the Quandstart R package,  there are ways to get the cash Sharpe Ratio (Sharpe Ratio from profit and loss) and the returns-based Sharpe Ratio (Sharpe Ratio from P\&L over initial equity) of a strategy.
+ The annualized returns-based Sharpe Ratios are low, the highest being ~ 0.23 on stock AEP. Let's try to increase the annualized returns-based Sharpe ratio by changing the oscillator of this strategy. 
 
 
 
@@ -517,7 +539,7 @@ Sharpe ratio = (Mean portfolio return - Risk-free rate ) / Standard deviation of
 #### INITIALIZE STRATEGY ####
 ### Create initdate, from, and to charater strings
 initdate <- "2000-01-01"
-from <- "2003-01-01"
+from <- "2000-01-01"
 to <- "2016-12-31"
 
 ### Set the timezone to UTC
@@ -528,7 +550,7 @@ Sys.setenv(TZ = "EST")
 currency("USD")
 
 ### Use the stock command to initialize and set currency to USD
-stock(c("stockOne", "stockTwo"), currency = "USD")
+stock(c("stockAEP", "stockCHK"), currency = "USD")
 
 
 ### Define your trade size and initial equity
@@ -545,7 +567,7 @@ rm.strat(strategyDVO.st)
 
 
 ### initialize the portfolio
-initPortf(portfolioDVO.st, symbols = c("stockOne", "stockTwo"), initDate = initdate, currency = "USD")
+initPortf(portfolioDVO.st, symbols = c("stockAEP", "stockCHK"), initDate = initdate, currency = "USD")
 
 ### initialize the account
 initAcct(accountDVO.st, portfolios = portfolioDVO.st, initDate = initdate, currency = "USD", initEq = initeq)
@@ -650,16 +672,24 @@ add.signal(strategyDVO.st, name = "sigFormula",
                                 cross = TRUE),
 # label it longentry
                label = "longentry")
+```
+
+
+```{r, echo=FALSE, message = FALSE}
 
 # Test
 # Create your dataset: test
-test_init <- applyIndicators(strategyDVO.st, mktdata = OHLC(stockOne))
+test_init <- applyIndicators(strategyDVO.st, mktdata = OHLC(stockAEP))
 test <- applySignals(strategy = strategyDVO.st, mktdata = test_init)
-knitr::kable(head(test))
+print(knitr::kable(t(test["2013-09-01/2013-09-05"]), caption = "AEP Subset"))
+```
+  
 
-test_init2 <- applyIndicators(strategyDVO.st, mktdata = OHLC(stockTwo))
+
+```{r, echo=FALSE, message = FALSE}
+test_init2 <- applyIndicators(strategyDVO.st, mktdata = OHLC(stockCHK))
 test2 <- applySignals(strategy = strategyDVO.st, mktdata = test_init2)
-knitr::kable(head(test2))
+print( knitr::kable( t( test2["2013-09-01/2013-09-05"] ), caption =  "CHK Subset" ) )
 
 ### Subset your data between Sep. 1 and Sep. 5 of 2013
 #test_subset <- test["2013-09-01/2013-09-05"]
@@ -667,9 +697,11 @@ knitr::kable(head(test2))
 
 #test_subset2 <- test2["2013-09-01/2013-09-05"]
 #test_subset2
+```
 
 
 
+```{r, echo=FALSE, include = FALSE}
 
 #### ADD RULES ####
 ### Using add.rule() to implement an exit rule #########
@@ -749,6 +781,9 @@ tstats[, c("Symbol", "Profit.Factor")]
   
   Performance of the systems:  
 
+  
+- stock 1: AEP
+
 ```{r, echo=FALSE, message=FALSE, fig.keep = 'last'}
 #### USING CHART.POSN() ####
 ### use chart.Posn to view your system's performance on stocks
@@ -757,44 +792,49 @@ tstats[, c("Symbol", "Profit.Factor")]
 # Produces a three-panel chart of time series charts that contains prices and transactions in the top panel, the resulting position in the second, and a cumulative profit-loss line chart in the third. 
 # The percent positive statistic lets you know how many of your trades were winners. 
 
-chart.Posn(Portfolio = portfolioDVO.st, Symbol = "stockOne")
 ### Adding indicators to a chart.Posn() chart ##########
 # compute the SMA50
-sma50 <- SMA(x = Cl(stockOne), n = 50)
+sma50 <- SMA(x = Cl(stockAEP), n = 50)
 # compute the SMA200
-sma200 <- SMA(x = Cl(stockOne), n = 200)
+sma200 <- SMA(x = Cl(stockAEP), n = 200)
 # compute the DVO_2_126 with an navg of 2 and a percentlookback of 126
-dvo <- DVO(HLC = HLC(stockOne), navg = 2, percentlookback = 126)
+dvo <- DVO(HLC = HLC(stockAEP), navg = 2, percentlookback = 126)
 # recreate the chart.Posn of the strategy 
-chart.Posn(Portfolio = portfolioDVO.st, Symbol = "stockOne")
+chart.Posn(Portfolio = portfolioDVO.st, Symbol = "stockAEP" , main = "AEP Performance")
 # overlay the SMA50 on your plot as a blue line
-add_TA(sma50, on = 1, col = "blue")
+add_TA(sma50, on = 1, col = "cyan")
 # overlay the SMA200 on your plot as a red line
-add_TA(sma200, on = 1, col = "red")
+add_TA(sma200, on = 1, col = "purple")
 # add the DVO_2_126 to the plot in a new window
-add_TA(dvo)
+add_TA(dvo, col = "black")
+legend('top', c("SMA50", "SMA200", "DVO 2_126"),
+    lty = c(1, 1), lwd = c(2.5, 2.5), col = c('cyan', 'purple', "black"), cex = .50, horiz = TRUE)
 ```
   
 
+  
+- stock 2: CHK
 
 ```{r, echo=FALSE, message=FALSE, fig.keep = 'last'}
-chart.Posn(Portfolio = portfolioDVO.st, Symbol = "stockTwo")
+
 ### Adding indicators to a chart.Posn() chart ##########
 # compute the SMA50
-sma50 <- SMA(x = Cl(stockOne), n = 50)
+sma50 <- SMA(x = Cl(stockCHK), n = 50)
 # compute the SMA200
-sma200 <- SMA(x = Cl(stockOne), n = 200)
+sma200 <- SMA(x = Cl(stockCHK), n = 200)
 # compute the DVO_2_126 with an navg of 2 and a percentlookback of 126
-dvo <- DVO(HLC = HLC(stockOne), navg = 2, percentlookback = 126)
+dvo <- DVO(HLC = HLC(stockCHK), navg = 2, percentlookback = 126)
 # recreate the chart.Posn of the strategy 
-chart.Posn(Portfolio = portfolioDVO.st, Symbol = "stockTwo")
+chart.Posn(Portfolio = portfolioDVO.st, Symbol = "stockCHK")
 # overlay the SMA50 on your plot as a blue line
-add_TA(sma50, on = 1, col = "blue")
+add_TA(sma50, on = 1, col = "cyan")
 # overlay the SMA200 on your plot as a red line
-add_TA(sma200, on = 1, col = "red")
+add_TA(sma200, on = 1, col = "purple")
 # add the DVO_2_126 to the plot in a new window
 add_TA(dvo)
-
+add_TA(dvo, col = "black")
+legend('top', c("SMA50", "SMA200", "DVO 2_126"),
+    lty = c(1, 1), lwd = c(2.5, 2.5), col = c('cyan', 'purple', "black"), cex = .50, horiz = TRUE)
 ```
 
   
@@ -807,10 +847,10 @@ add_TA(dvo)
 # Order Book
 getOrderBook(portfolioDVO.st) 
 # Update Portfolio
-updatePortf(portfolioDVO.st, Symbol = c("stockOne", "stockTwo"))
+updatePortf(portfolioDVO.st, Symbol = c("stockAEP", "stockCHK"))
 
 # Strategy output with trdeStats
-tradeStats(portfolioDVO.st, Symbol = c("stockOne", "stockTwo"))
+tradeStats(portfolioDVO.st, Symbol = c("stockAEP", "stockCHK"))
 ```
 
 ```{r, echo=FALSE, message=FALSE}
@@ -833,9 +873,95 @@ knitr::kable(SharpeRatio.annualized(instretsDVO, geometric = FALSE))
   Therefore, the absolute value of the gross profits over gross losses is higher in the RSI strategy for each respective stok, while the return per unit of risk is better in the DVO strategy.  
   
   Nonetheless, is that enough to select one strategy over the other? Would an entry rule with an order sizing functon instead of a single share considerably improve one strategy over 
-  the other in terms of profit and risk-adjusted return?
+  the other in terms of profit and risk-adjusted return?  
 
 
+
+
+
+  \pagebreak
+
+# GLOSSARY
+  
+  
+  * **Indicator**:  
+  
+  *transformation of market data that gives an insight into the overall market behavior by measuring current conditions and/or forecasting trends.  *
+   
+
+  * **Instrument**:  
+  
+  *Market data, stock * 
+
+
+  * **Profit factor**:  
+  
+  *monetary unit gained per monetary unit lost*
+  
+
+  * **RSI**:  
+  
+  *(Relative Strength Index) a type of oscillator (reversion indicator) used to discover on a scale of 0 to 100 short-term overbought (above 70 to 80) or oversold (below 30 to 20) conditions*
+
+
+  * **Sharpe Ratio**:
+  
+  *a risk-adjusted measure of return*
+  
+
+  * **Signal**: 
+
+  *metric that helps interpret how indicators interact with the market and with each other*
+
+
+  * **SMA**:  
+  
+  *(Simple Moving Average) a type of trend-following indicator which depict the general price direction as a smooth average over a period of time*
+
+
+
+  
+  \pagebreak
+
+
+
+
+# REFERENCES
+  
+
+  - [Quantitative Trading Strategy Using R: A Step by Step Guide](https://www.r-bloggers.com/quantitative-trading-strategy-using-r-a-step-by-step-guide/)  
+  *https://www.r-bloggers.com/quantitative-trading-strategy-using-r-a-step-by-step-guide/  *
+  
+
+  - Investopedia 4 most common indicators  
+  *http://www.investopedia.com/articles/active-trading/041814/four-most-commonlyused-indicators-trend-trading.asp  *
+  
+
+  - Oscillators  
+   *http://www.investopedia.com/terms/o/oscillator.asp * 
+
+  
+  - Momentums  
+   *http://www.investopedia.com/terms/m/momentum.asp * 
+  
+
+  - Sharpe Ratio 
+  *http://www.investopedia.com/terms/s/sharperatio.asp?ad=dirN&qo=investopediaSiteSearch&qsrc=0&o=40186  *
+  
+
+  - Understanding profit metrics   
+  *http://www.investopedia.com/articles/investing/062113/understanding-profit-metrics-gross-operating-and-net-profits.asp?ad=dirN&qo=investopediaSiteSearch&qsrc=0&o=40186  *
+  
+
+  - Trend Vigor Part III: ATR position sizing, Annualized Sharpe above 1.4, and Why Leverage Is Pointless  
+  *https://www.r-bloggers.com/trend-vigor-part-iii-atr-position-sizing-annualized-sharpe-above-1-4-and-why-leverage-is-pointless/ *
+
+
+
+
+
+
+  
 
 
 
