@@ -56,8 +56,8 @@ library(pander)
 #### Load scripts ####
 #getwd()
 #setwd('C:/Users/d_kamning/OneDrive for Business/Private/Springboard/Capstone')
-#source('F:/Springboard-Foundations-of-Data-Science-Workshop/Capstone/Final/functions_util.R')
-source('C:/Users/d_kamning/OneDrive for Business/Private/Springboard/Capstone/Final/functions_util.R')
+source('F:/Springboard-Foundations-of-Data-Science-Workshop/Capstone/Final/functions_util.R')
+#source('C:/Users/d_kamning/OneDrive for Business/Private/Springboard/Capstone/Final/functions_util.R')
 
 
 #### LOAD DATA ####
@@ -614,7 +614,7 @@ $$Profit factor = Abs( gross profits / gross losses)$$
 $$ Sharpe ratio = (Mean portfolio return - Risk-free rate ) / Standard deviation of portfolio return $$
 
   
- With the Quandstart R package,  there are ways to get the cash Sharpe Ratio (Sharpe Ratio from profit and loss) and the returns-based Sharpe Ratio (Sharpe Ratio from P\&L over initial equity) of a strategy.
+ With the Quandstart R package,  there are ways to get the cash Sharpe Ratio (Sharpe Ratio from profit and loss) and the returns-based Sharpe Ratio (Sharpe Ratio from P&L over initial equity) of a strategy.
  The annualized returns-based Sharpe Ratios are low, the highest being ~ 0.23 on stock AEP. Let's try to increase the annualized returns-based Sharpe ratio by changing the oscillator of this strategy. 
 
 
